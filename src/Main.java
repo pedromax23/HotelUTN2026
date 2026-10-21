@@ -3,4 +3,5 @@
 void main() {
     IO.println("otro cambio");
     IO.println("doble cambio");
+    IO.println("doble cambio");
 }
