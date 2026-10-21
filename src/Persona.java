@@ -1,18 +1,20 @@
-public class Persona {
+public abstract class Persona {
     private String nombre;
     private String apellido;
     private char sexo;
     private String dni;
     private int edad;
     private String email;
+    private String domicilio;
 
-    public Persona(String nombre, String apellido, char sexo, String dni, int edad, String email) {
+    public Persona(String nombre, String apellido, char sexo, String dni, int edad, String email,String domicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.sexo = sexo;
         this.dni = dni;
         this.edad = edad;
         this.email = email;
+        this.domicilio=domicilio;
     }
 
     public String getNombre() {
@@ -61,6 +63,14 @@ public class Persona {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
     }
 }
 
