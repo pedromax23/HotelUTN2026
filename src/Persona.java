@@ -17,6 +17,7 @@ public abstract class Persona {
         this.domicilio=domicilio;
     }
 
+
     public String getNombre() {
         return nombre;
     }

@@ -4,14 +4,12 @@ public class Habitacion {
     private TipoHabitacion tipo;
     private boolean disponible;
     private boolean enUso;
-    private int capacidad;
 
-    public Habitacion(int numeroHabitacion, boolean disponible, TipoHabitacion tipo, boolean enUso, int capacidad) {
+    public Habitacion(int numeroHabitacion, boolean disponible, TipoHabitacion tipo, boolean enUso) {
         this.numeroHabitacion = numeroHabitacion;
         this.disponible = disponible;
         this.tipo = tipo;
         this.enUso = enUso;
-        this.capacidad = capacidad;
     }
 
     public int getNumeroHabitacion() {
@@ -20,14 +18,6 @@ public class Habitacion {
 
     public void setNumeroHabitacion(int numeroHabitacion) {
         this.numeroHabitacion = numeroHabitacion;
-    }
-
-    public int getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
     }
 
     public boolean isEnUso() {
