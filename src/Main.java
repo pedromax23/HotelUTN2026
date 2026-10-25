@@ -14,7 +14,7 @@ public class Main {
         Base_De_Datos db = new Base_De_Datos();
         db.CreaConexion();
         db.crearTablasHotel();
-        user.InterfazDeUsuario();
+        user.InterfazDeUsuario(db);
     }
 
 }

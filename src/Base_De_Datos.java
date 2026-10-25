@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,12 +25,12 @@ public class Base_De_Datos {
             Statement stmt = conexion.createStatement();
             String sqlCliente = "CREATE TABLE IF NOT EXISTS cliente (" +
                     "dni VARCHAR(20) PRIMARY KEY, " +
-                    "nombre VARCHAR(50) NOT NULL, " +
-                    "apellido VARCHAR(50) NOT NULL, " +
-                    "sexo CHAR(1) NOT NULL, " +
-                    "edad INT NOT NULL, " +
+                    "nombre VARCHAR(50) NULL, " +
+                    "apellido VARCHAR(50) NULL, " +
+                    "sexo CHAR(1)  NULL, " +
+                    "edad INT  NULL, " +
                     "email VARCHAR(100) NOT NULL, " +
-                    "domicilio VARCHAR(150) NOT NULL, " +
+                    "domicilio VARCHAR(150)  NULL, " +
                     "contrasenia VARCHAR(100) NOT NULL" +
                     ")";
             stmt.execute(sqlCliente);
@@ -60,6 +57,19 @@ public class Base_De_Datos {
 
         } catch (SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void registrarUsuario(String dni, String email, String contrasenia) {
+        String sql = "INSERT INTO cliente (dni, email, contrasenia) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, dni);
+            ps.setString(2, email);
+            ps.setString(3, contrasenia);
+            ps.executeUpdate();
+            System.out.println("Usuario Registrado");
+        } catch (SQLException ex) {
+            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al registrar el Usuario");
         }
     }
 }

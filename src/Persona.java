@@ -18,9 +18,10 @@ public abstract class Persona {
         this.domicilio=domicilio;
         this.contrasenia=contrasenia;
     }
-    public Persona (String email, String contrasenia){
+    public Persona (String dni,String email, String contrasenia){
         this.contrasenia=contrasenia;
         this.email=email;
+        this.dni=dni;
     }
 
 
