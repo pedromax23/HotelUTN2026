@@ -6,8 +6,9 @@ public abstract class Persona {
     private int edad;
     private String email;
     private String domicilio;
+    private String contrasenia;
 
-    public Persona(String nombre, String apellido, char sexo, String dni, int edad, String email,String domicilio) {
+    public Persona(String nombre, String apellido, char sexo, String dni, int edad, String email,String domicilio,String contrasenia) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.sexo = sexo;
@@ -15,6 +16,11 @@ public abstract class Persona {
         this.edad = edad;
         this.email = email;
         this.domicilio=domicilio;
+        this.contrasenia=contrasenia;
+    }
+    public Persona (String email, String contrasenia){
+        this.contrasenia=contrasenia;
+        this.email=email;
     }
 
 
