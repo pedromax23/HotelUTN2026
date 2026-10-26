@@ -1,3 +1,5 @@
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
+
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +72,27 @@ public class Base_De_Datos {
         } catch (SQLException ex) {
             Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error al registrar el Usuario");
+        }
+    }
+    public void registrarDatosUsuario(String dni, String nombre, String apellido, char sexo, int edad, String domicilio) {
+        String sql = "UPDATE cliente SET nombre = ?, apellido = ?, sexo = ?, edad = ?, domicilio = ? WHERE dni = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            ps.setString(2, apellido);
+            ps.setString(3, String.valueOf(sexo));
+            ps.setInt(4, edad);
+            ps.setString(5, domicilio);
+            ps.setString(6, dni);
+            int filasActualizadas = ps.executeUpdate();
+            if (filasActualizadas > 0) {
+                System.out.println("Se guardaron los datos");
+            } else {
+                System.out.println("El dni no coincide.");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al actualizar los datos.");
         }
     }
 }

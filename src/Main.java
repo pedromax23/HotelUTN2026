@@ -15,6 +15,7 @@ public class Main {
         db.CreaConexion();
         db.crearTablasHotel();
         user.InterfazDeUsuario(db);
+
     }
 
 }
