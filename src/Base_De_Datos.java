@@ -9,8 +9,8 @@ public class Base_De_Datos {
     Connection conexion;
 
     public void CreaConexion(){
-        try {
 
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "18122005");
             System.out.println("Conexion establecida con exito");
@@ -97,12 +97,16 @@ public class Base_De_Datos {
         }
     }
     public boolean NoExisteDni (String dniingresado){
+
         String sql = ("SELECT dni FROM cliente WHERE dni=?");
+
         try (PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setString(1, dniingresado);
+
             try (ResultSet rs = ps.executeQuery()) {
                 return !rs.next();
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error al verificar el DNI ");
