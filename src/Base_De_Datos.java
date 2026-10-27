@@ -33,7 +33,7 @@ public class Base_De_Datos {
                     "edad INT  NULL, " +
                     "email VARCHAR(100) NOT NULL, " +
                     "domicilio VARCHAR(150)  NULL, " +
-                    "contrasenia VARCHAR(100) NOT NULL" +
+                    "contrasenia INT NOT NULL" +
                     ")";
             stmt.execute(sqlCliente);
             String sqlHabitacion = "CREATE TABLE IF NOT EXISTS habitacion (" +
@@ -59,14 +59,15 @@ public class Base_De_Datos {
 
         } catch (SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al cargar las tablas");
         }
     }
-    public void registrarUsuario(String dni, String email, String contrasenia) {
+    public void registrarUsuario(String dni, String email, int contrasenia) {
         String sql = "INSERT INTO cliente (dni, email, contrasenia) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, dni);
             ps.setString(2, email);
-            ps.setString(3, contrasenia);
+            ps.setInt(3, contrasenia);
             ps.executeUpdate();
             System.out.println("Usuario Registrado");
         } catch (SQLException ex) {
@@ -95,4 +96,45 @@ public class Base_De_Datos {
             System.out.println("Error al actualizar los datos.");
         }
     }
-}
+    public boolean NoExisteDni (String dniingresado){
+        String sql = ("SELECT dni FROM cliente WHERE dni=?");
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setString(1, dniingresado);
+            try (ResultSet rs = ps.executeQuery()) {
+                return !rs.next();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al verificar el DNI ");
+        }
+        return false;
+    }
+    public boolean NoExisteEmail (String email){
+        String sql = ("SELECT email FROM cliente WHERE email=?");
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return !rs.next();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al verificar el Email");
+        }
+        return false;
+    }
+    public boolean ExisteContraseña (int contraseña){
+        String sql = ("SELECT contrasenia FROM cliente WHERE contrasenia=?");
+        try (PreparedStatement ps = conexion.prepareStatement(sql)){
+            ps.setInt(1, contraseña);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al verificar la Contraseña");
+        }
+        return false;
+    }
+
+    }
+
