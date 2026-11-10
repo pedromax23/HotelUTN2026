@@ -2,6 +2,8 @@ import Base_de_datos.Base_De_Datos;
 import Clases.*;
 import Enums.TipoHabitacion;
 
+import java.sql.Connection;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -15,10 +17,8 @@ public class Main {
        System.out.println(reserva1.getValorEstadia());
         Gestor_Usuario user = new Gestor_Usuario();
 
-        Base_De_Datos db = new Base_De_Datos();
-        db.CreaConexion();
-        db.crearTablasHotel();
-        user.InterfazDeUsuario(db);
+        Connection conexion = Base_De_Datos.CreaConexion();
+        user.InterfazDeUsuario();
 
     }
 

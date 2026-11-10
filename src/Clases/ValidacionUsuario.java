@@ -1,21 +1,19 @@
 package Clases;
 
 import Base_de_datos.Base_De_Datos;
+import Base_de_datos.Iniciar_DB;
+import Base_de_datos.UsuariosDAO;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.DniExiste;
 import Exceptions.EmailNoValido;
 
+import java.sql.Connection;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ValidacionUsuario {
 
-    Base_De_Datos db;
-
-    public ValidacionUsuario(Base_De_Datos db) {
-        this.db = db;
-    }
-
+    UsuariosDAO usuarioDB;
 
     public boolean validarEmail(String email) {
 
@@ -27,7 +25,7 @@ public class ValidacionUsuario {
         boolean flag = matcher.matches();
 
         // Validar si el email ya existe
-        boolean flag1 = db.NoExisteEmail(email);
+        boolean flag1 = usuarioDB.NoExisteEmail(email);
 
         try {
             if ((!flag) || (!flag1)) {
@@ -47,7 +45,7 @@ public class ValidacionUsuario {
         boolean esDni = dni.matches("^\\d{7,8}$");
 
         // Validar si el dni ya existe
-        boolean estaEnDb = db.NoExisteDni(dni);
+        boolean estaEnDb = usuarioDB.NoExisteDni(dni);
 
         try {
             if ((!esDni) || (!estaEnDb)) {

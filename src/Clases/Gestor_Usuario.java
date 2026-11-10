@@ -1,6 +1,7 @@
 package Clases;
 
 import Base_de_datos.Base_De_Datos;
+import Base_de_datos.UsuariosDAO;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.EmailNoValido;
 
@@ -8,12 +9,14 @@ import java.util.Scanner;
 
 public class Gestor_Usuario {
 
-    Base_De_Datos db;
+    // Traemos UsuariosDAO para usar sus metodos y operar en la base de datos
+    UsuariosDAO usuarioDB;
 
-    public void InterfazDeUsuario(Base_De_Datos db) {
 
-        // Validaciones
-        ValidacionUsuario validacionUsuario = new ValidacionUsuario(this.db);
+    public void InterfazDeUsuario() {
+
+        // Objeto para validar los campos de los usuarios
+        ValidacionUsuario validacionUsuario = new ValidacionUsuario();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -60,7 +63,7 @@ public class Gestor_Usuario {
                 }while(!validacionUsuario.validarPass(password, confirmPass));
 
                 int passHash = password.hashCode();
-                this.db.registrarUsuario(dni, email, passHash);
+                usuarioDB.registrarUsuario(dni, email, passHash);
 
                 CargaDatos(dni);
             }
@@ -71,7 +74,7 @@ public class Gestor_Usuario {
                     int i = 0;
                     System.out.println("Ingrese un email:");
                     email = scanner.nextLine();
-                    flag=!(this.db.NoExisteEmail(email));
+                    flag=!(usuarioDB.NoExisteEmail(email));
                     try {
                         if (flag) {
                             throw new EmailNoValido("El Email no existe");
@@ -84,7 +87,7 @@ public class Gestor_Usuario {
                     System.out.println("Ingrese su contraseña");
                     String contraseña=scanner.nextLine();
                     int password = contraseña.hashCode();
-                    flag=(this.db.ExisteContraseña(password));
+                    flag=(usuarioDB.ExisteContraseña(password));
                     try {
                         if (flag){
                             throw new ContraseñaNoCoincide("Las contraseñas no coinciden");
@@ -112,6 +115,6 @@ public class Gestor_Usuario {
         int edad = scanner.nextInt();
         String domicilio = scanner.nextLine();
         scanner.nextLine();
-        db.registrarDatosUsuario(dni,nombre,apellido,sexo,edad,domicilio);
+        usuarioDB.registrarDatosUsuario(dni,nombre,apellido,sexo,edad,domicilio);
     }
 }
