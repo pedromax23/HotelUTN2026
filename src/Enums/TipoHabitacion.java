@@ -1,3 +1,5 @@
+package Enums;
+
 public enum TipoHabitacion {
 
     STANDARD("Standar", 50, 2),

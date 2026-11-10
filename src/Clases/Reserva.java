@@ -1,3 +1,5 @@
+package Clases;
+
 public class Reserva {
 
     private Habitacion habitacion;

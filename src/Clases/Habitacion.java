@@ -1,3 +1,7 @@
+package Clases;
+
+import Enums.TipoHabitacion;
+
 public class Habitacion {
 
     private int numeroHabitacion;

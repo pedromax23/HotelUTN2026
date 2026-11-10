@@ -1,13 +1,19 @@
+package Clases;
+
+import Base_de_datos.Base_De_Datos;
+import Exceptions.ContraseñaNoCoincide;
+import Exceptions.EmailNoValido;
+
 import java.util.Scanner;
 
 public class Gestor_Usuario {
 
     Base_De_Datos db;
 
-    public void InterfazDeUsuario() {
+    public void InterfazDeUsuario(Base_De_Datos db) {
 
         // Validaciones
-        ValidacionUsuario validacionUsuario = new ValidacionUsuario(db);
+        ValidacionUsuario validacionUsuario = new ValidacionUsuario(this.db);
 
         Scanner scanner = new Scanner(System.in);
 
@@ -54,7 +60,7 @@ public class Gestor_Usuario {
                 }while(!validacionUsuario.validarPass(password, confirmPass));
 
                 int passHash = password.hashCode();
-                db.registrarUsuario(dni, email, passHash);
+                this.db.registrarUsuario(dni, email, passHash);
 
                 CargaDatos(dni);
             }
@@ -65,7 +71,7 @@ public class Gestor_Usuario {
                     int i = 0;
                     System.out.println("Ingrese un email:");
                     email = scanner.nextLine();
-                    flag=!(db.NoExisteEmail(email));
+                    flag=!(this.db.NoExisteEmail(email));
                     try {
                         if (flag) {
                             throw new EmailNoValido("El Email no existe");
@@ -78,7 +84,7 @@ public class Gestor_Usuario {
                     System.out.println("Ingrese su contraseña");
                     String contraseña=scanner.nextLine();
                     int password = contraseña.hashCode();
-                    flag=(db.ExisteContraseña(password));
+                    flag=(this.db.ExisteContraseña(password));
                     try {
                         if (flag){
                             throw new ContraseñaNoCoincide("Las contraseñas no coinciden");

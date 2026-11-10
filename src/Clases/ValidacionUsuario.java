@@ -1,3 +1,10 @@
+package Clases;
+
+import Base_de_datos.Base_De_Datos;
+import Exceptions.ContraseñaNoCoincide;
+import Exceptions.DniExiste;
+import Exceptions.EmailNoValido;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
