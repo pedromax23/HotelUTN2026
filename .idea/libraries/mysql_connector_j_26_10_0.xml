@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://G:/Nueva carpeta/mysql-connector-j-26.10.0/mysql-connector-j-26.10.0/mysql-connector-j-26.10.0.jar!/" />
       <root url="file://$PROJECT_DIR$/.idea/libraries" />
+      <root url="jar://$PROJECT_DIR$/mysql-connector-j-26.10.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
