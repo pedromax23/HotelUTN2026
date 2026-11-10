@@ -16,5 +16,6 @@
       </library>
     </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="mysql-connector-j-26.10.0" level="project" />
   </component>
 </module>
