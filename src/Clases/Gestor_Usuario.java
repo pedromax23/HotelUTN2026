@@ -93,7 +93,8 @@ public class Gestor_Usuario {
                     }
                 }while (flag);
                 System.out.println("se inicio sesion");
-            }
+
+        }
         }
     }
 
@@ -113,4 +114,5 @@ public class Gestor_Usuario {
         scanner.nextLine();
         UsuariosDAO.registrarDatosUsuario(dni,nombre,apellido,sexo,edad,domicilio);
     }
+
 }
