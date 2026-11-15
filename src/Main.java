@@ -15,10 +15,8 @@ public class Main {
 
 
         System.out.println(reserva1.getValorEstadia());
-        Gestor_Usuario user = new Gestor_Usuario();
 
         Connection conexion = Base_De_Datos.CreaConexion();
-        user.InterfazDeUsuario();
 
 
     }

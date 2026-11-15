@@ -1,8 +1,8 @@
 package Exceptions;
 
-public class EmailNoValido extends RuntimeException {
+public class EmailNoValido extends Exception {
 
-    public EmailNoValido(String message) {
-        super(message);
+    public EmailNoValido() {
+        super("El Email no existe");
     }
 }

@@ -1,5 +1,6 @@
 package Base_de_datos;
 
+import Clases.Cliente;
 import com.sun.tools.javac.Main;
 
 import java.sql.Connection;
@@ -96,7 +97,7 @@ public class UsuariosDAO {
 
             ps.setString(1, email);
 
-            try (ResultSet rs = ps.executeQuery(   )) {
+            try (ResultSet rs = ps.executeQuery()) {
             return !rs.next();
             }
 
@@ -130,6 +131,38 @@ public class UsuariosDAO {
         }
 
         return false;
+    }
+
+    public static Cliente buscarPorDni(String dni) {
+        char sexo;
+
+        String sql = "SELECT * FROM cliente WHERE dni = ?";
+
+        try (Connection conexion = Base_De_Datos.CreaConexion();
+             PreparedStatement ps = conexion.prepareStatement(sql)) {
+                ps.setString(1, dni);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Cliente(
+                            rs.getString("nombre"),
+                            rs.getString("apellido"),
+                            if (rs.getString("sexo") != null) {
+                                sexo = rs.getString("sexo").charAt(0);
+                            } else {
+                                sexo = '\0';
+                            }
+                            rs.getString("dni"),
+                            rs.getInt("edad"),
+                            rs.getString("email"),
+                            rs.getString("domicilio"),
+                            rs.getInt("contrasenia")
+                    );
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

@@ -1,7 +1,7 @@
 package Exceptions;
 
-public class ContraseñaNoCoincide extends RuntimeException {
-    public ContraseñaNoCoincide(String message) {
-        super(message);
+public class ContraseñaNoCoincide extends Exception {
+    public ContraseñaNoCoincide() {
+        super("Las contraseñas no coinciden");
     }
 }

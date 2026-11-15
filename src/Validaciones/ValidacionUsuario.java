@@ -1,21 +1,16 @@
-package Clases;
+package Validaciones;
 
-import Base_de_datos.Base_De_Datos;
-import Base_de_datos.Iniciar_DB;
 import Base_de_datos.UsuariosDAO;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.DniExiste;
 import Exceptions.EmailNoValido;
 
-import java.sql.Connection;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ValidacionUsuario {
 
-    UsuariosDAO usuarioDB;
-
-    public boolean validarEmail(String email) {
+    public static boolean validarEmail(String email) {
 
         // Validar si es un email
         String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
@@ -25,7 +20,7 @@ public class ValidacionUsuario {
         boolean flag = matcher.matches();
 
         // Validar si el email ya existe
-        boolean flag1 = usuarioDB.NoExisteEmail(email);
+        boolean flag1 = UsuariosDAO.NoExisteEmail(email);
 
         try {
             if ((!flag) || (!flag1)) {
@@ -39,13 +34,13 @@ public class ValidacionUsuario {
 
     }
 
-    public boolean validarDni(String dni) {
+    public static boolean validarDni(String dni) {
 
         // Validar si es un dni
         boolean esDni = dni.matches("^\\d{7,8}$");
 
         // Validar si el dni ya existe
-        boolean estaEnDb = usuarioDB.NoExisteDni(dni);
+        boolean estaEnDb = UsuariosDAO.NoExisteDni(dni);
 
         try {
             if ((!esDni) || (!estaEnDb)) {
@@ -58,7 +53,7 @@ public class ValidacionUsuario {
         return (esDni && estaEnDb);
     }
 
-    public boolean validarPass(String password, String confirmPass) {
+    public static boolean validarPass(String password, String confirmPass) {
 
         // Validar si la contraseña cumple las condiciones
         String PASS_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
@@ -80,6 +75,5 @@ public class ValidacionUsuario {
 
         return (passMatch && isValid);
     }
-
 
 }
