@@ -1,6 +1,7 @@
 package Base_de_datos;
 
 import Clases.Cliente;
+import Interfaces.IPersonaDAO;
 import com.sun.tools.javac.Main;
 
 import java.sql.Connection;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UsuariosDAO {
+public class UsuariosDAO implements IPersonaDAO {
 
     public static void registrarUsuario(String dni, String email, int contrasenia) {
 
@@ -66,28 +67,6 @@ public class UsuariosDAO {
         }
     }
 
-    public static boolean NoExisteDni (String dniingresado){
-
-        String sql = ("SELECT dni FROM cliente WHERE dni=?");
-
-        try (Connection conexion = Base_De_Datos.CreaConexion();
-
-            PreparedStatement ps = conexion.prepareStatement(sql);) {
-            ps.setString(1, dniingresado);
-
-            try (ResultSet rs = ps.executeQuery()) {
-            return !rs.next();
-            }
-
-        } catch (SQLException ex) {
-
-            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error al verificar el DNI ");
-
-        }
-        return false;
-    }
-
     public static boolean NoExisteEmail(String email) {
 
         String sql = "SELECT email FROM cliente WHERE email = ?";
@@ -111,43 +90,26 @@ public class UsuariosDAO {
         return false;
     }
 
-    public static boolean ExisteContraseña (int contraseña){
-
-        String sql = ("SELECT contrasenia FROM cliente WHERE contrasenia=?");
-
-        try (Connection conexion = Base_De_Datos.CreaConexion();
-             PreparedStatement ps = conexion.prepareStatement(sql)){
-
-             ps.setInt(1, contraseña);
-             try (ResultSet rs = ps.executeQuery()) {
-                 return rs.next();
-             }
-
-        } catch (SQLException ex) {
-
-            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error al verificar la Contraseña");
-
-        }
-
-        return false;
-    }
-
-    public static Cliente buscarPorDni(String dni) {
+    public static Cliente buscarPorEmail(String email) {
         char sexo;
 
-        String sql = "SELECT * FROM cliente WHERE dni = ?";
+        String sql = "SELECT * FROM cliente WHERE email = ?";
 
         try (Connection conexion = Base_De_Datos.CreaConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
-                ps.setString(1, dni);
+
+            ps.setString(1, email);
+
             try (ResultSet rs = ps.executeQuery()) {
+
                 if (rs.next()) {
+
                     if (rs.getString("sexo") != null) {
                         sexo = rs.getString("sexo").charAt(0);
                     } else {
                         sexo = '\0';
                     }
+
                     return new Cliente(
                             rs.getString("nombre"),
                             rs.getString("apellido"),
@@ -156,14 +118,40 @@ public class UsuariosDAO {
                             rs.getInt("edad"),
                             rs.getString("email"),
                             rs.getString("domicilio"),
-                            rs.getInt("contrasenia"),
+                            rs.getInt("contrasenia")
                     );
+
                 }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
+
         }
+
         return null;
+    }
+
+    @Override
+    public boolean noExisteDni(String dniIngresado) {
+        String sql = ("SELECT dni FROM cliente WHERE dni=?");
+
+        try (Connection conexion = Base_De_Datos.CreaConexion();
+
+             PreparedStatement ps = conexion.prepareStatement(sql);) {
+            ps.setString(1, dniIngresado);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return !rs.next();
+            }
+
+        } catch (SQLException ex) {
+
+            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al verificar el DNI ");
+
+        }
+        return false;
     }
 
 }

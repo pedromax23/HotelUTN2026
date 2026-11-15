@@ -1,5 +1,7 @@
 package Clases;
 
+import java.util.Objects;
+
 public abstract class Persona {
     private String nombre;
     private String apellido;
@@ -81,6 +83,18 @@ public abstract class Persona {
 
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Persona persona = (Persona) o;
+        return Objects.equals(email, persona.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(email);
     }
 }
 

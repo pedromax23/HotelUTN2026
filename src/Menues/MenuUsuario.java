@@ -3,6 +3,7 @@ package Menues;
 import Base_de_datos.UsuariosDAO;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.EmailNoValido;
+import Interfaces.IPersonaDAO;
 import Validaciones.ValidacionUsuario;
 
 import java.util.Scanner;
@@ -115,7 +116,7 @@ public class MenuUsuario {
 
             int password = contrasenia.hashCode();
 
-            flag=(UsuariosDAO.ExisteContraseña(password));
+            flag=(IPersonaDAO.ExisteContraseña(password));
 
             try {
                 if (flag){

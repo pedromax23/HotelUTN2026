@@ -16,6 +16,7 @@ public class Iniciar_DB {
             Connection conexion = Base_De_Datos.CreaConexion();
 
             Statement stmt = conexion.createStatement();
+
             String sqlCliente = "CREATE TABLE IF NOT EXISTS cliente (" +
                     "dni VARCHAR(20) PRIMARY KEY, " +
                     "nombre VARCHAR(50) NULL, " +
@@ -27,6 +28,19 @@ public class Iniciar_DB {
                     "contrasenia INT NOT NULL" +
                     ")";
             stmt.execute(sqlCliente);
+
+            String sqlEmpleado = "CREATE TABLE IF NOT EXISTS empleado (" +
+                    "dni VARCHAR(20) PRIMARY KEY, " +
+                    "nombre VARCHAR(50) NULL, " +
+                    "apellido VARCHAR(50) NULL, " +
+                    "sexo CHAR(1)  NULL, " +
+                    "edad INT  NULL, " +
+                    "email VARCHAR(100) NOT NULL, " +
+                    "domicilio VARCHAR(150)  NULL, " +
+                    "contrasenia INT NOT NULL, " +
+                    "sueldo DOUBLE NOT NULL" +
+                    ")";
+            stmt.execute(sqlEmpleado);
 
             String sqlHabitacion = "CREATE TABLE IF NOT EXISTS habitacion (" +
                     "numeroHabitacion INT PRIMARY KEY, " +
