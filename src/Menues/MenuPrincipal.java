@@ -1,10 +1,5 @@
 package Menues;
 
-import Base_de_datos.UsuariosDAO;
-import Validaciones.ValidacionUsuario;
-import Exceptions.ContraseñaNoCoincide;
-import Exceptions.EmailNoValido;
-
 import java.util.Scanner;
 
 public class MenuPrincipal {

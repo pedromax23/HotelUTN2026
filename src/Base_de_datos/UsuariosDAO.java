@@ -155,7 +155,7 @@ public class UsuariosDAO {
                             rs.getInt("edad"),
                             rs.getString("email"),
                             rs.getString("domicilio"),
-                            rs.getInt("contrasenia")
+                            rs.getInt("contrasenia"),
                     );
                 }
             }
