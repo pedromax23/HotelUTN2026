@@ -1,7 +1,6 @@
 package Base_de_datos;
 
 import Clases.Cliente;
-import com.sun.tools.javac.Main;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -133,14 +132,14 @@ public class UsuariosDAO {
         return false;
     }
 
-    public static Cliente buscarPorDni(String dni) {
+    public static Cliente buscarPorEmail(String email) {
         char sexo;
 
-        String sql = "SELECT * FROM cliente WHERE dni = ?";
+        String sql = "SELECT * FROM cliente WHERE email = ?";
 
         try (Connection conexion = Base_De_Datos.CreaConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
-                ps.setString(1, dni);
+                ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     if (rs.getString("sexo") != null) {
@@ -156,7 +155,7 @@ public class UsuariosDAO {
                             rs.getInt("edad"),
                             rs.getString("email"),
                             rs.getString("domicilio"),
-                            rs.getInt("contrasenia"),
+                            rs.getInt("contrasenia")
                     );
                 }
             }

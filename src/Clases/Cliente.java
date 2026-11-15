@@ -10,4 +10,9 @@ public class Cliente extends Persona {
     public Cliente (String dni, String email, int password){
         super(dni,email, password);
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

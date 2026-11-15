@@ -10,8 +10,8 @@ public class MenuPrincipal {
     public static void menu() {
 
         Scanner sc = new Scanner(System.in);
-        String dni = Sesion.recuperarSesion();
-        if (dni.equals(null)){
+        String email = Sesion.recuperarSesion();
+        if (email.equals(null)){
                 System.out.println("1 - Crear Cuenta\n2 - Iniciar Sesion");
                 int opcion = sc.nextInt();
                 sc.nextLine();
@@ -30,7 +30,8 @@ public class MenuPrincipal {
                     }
                 }
         }else {
-            Persona persona = UsuariosDAO.buscarPorDni(dni);
+            Persona persona = UsuariosDAO.buscarPorEmail(email);
+            MenuClientes.menu(persona);
 
         }
 

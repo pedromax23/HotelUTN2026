@@ -6,12 +6,12 @@ public class Sesion {
 
     private static final String ARCHIVO = "sesion.txt";
 
-    public static void guardarSesion(String dni) {
+    public static void guardarSesion(String email) {
 
         try (BufferedWriter bw = new BufferedWriter(
                 new FileWriter(ARCHIVO))) {
 
-            bw.write(dni);
+            bw.write(email);
 
         } catch (IOException e) {
             System.out.println("Error al guardar la sesion");

@@ -82,5 +82,17 @@ public abstract class Persona {
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
     }
+
+    @Override
+    public String toString() {
+        return "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", sexo=" + sexo +
+                ", dni='" + dni + '\'' +
+                ", edad=" + edad +
+                ", email='" + email + '\'' +
+                ", domicilio='" + domicilio + '\'' +
+                ", password=" + password;
+    }
 }
 
