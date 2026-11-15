@@ -96,5 +96,17 @@ public abstract class Persona {
     public int hashCode() {
         return Objects.hashCode(email);
     }
+
+    @Override
+    public String toString() {
+        return "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", sexo=" + sexo +
+                ", dni='" + dni + '\'' +
+                ", edad=" + edad +
+                ", email='" + email + '\'' +
+                ", domicilio='" + domicilio + '\'' +
+                ", password=" + password;
+    }
 }
 

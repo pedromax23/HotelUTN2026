@@ -1,6 +1,7 @@
 package Menues;
 
 import Base_de_datos.UsuariosDAO;
+import Clases.Persona;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.EmailNoValido;
 import Interfaces.IPersonaDAO;
@@ -129,6 +130,7 @@ public class MenuUsuario {
         }while (flag);
 
         System.out.println("Iniciando session...");
+        Persona persona = UsuariosDAO.buscarPorEmail(email);
 
     }
 
