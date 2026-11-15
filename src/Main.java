@@ -14,11 +14,12 @@ public class Main {
         Reserva reserva1 = new Reserva(habitacion1, cliente1, 4);
 
 
-       System.out.println(reserva1.getValorEstadia());
+        System.out.println(reserva1.getValorEstadia());
         Gestor_Usuario user = new Gestor_Usuario();
 
         Connection conexion = Base_De_Datos.CreaConexion();
         user.InterfazDeUsuario();
+
 
     }
 

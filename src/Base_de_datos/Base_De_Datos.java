@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 public class Base_De_Datos {
 
-
     public static Connection CreaConexion() {
 
         try {
