@@ -143,14 +143,15 @@ public class UsuariosDAO {
                 ps.setString(1, dni);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    if (rs.getString("sexo") != null) {
+                        sexo = rs.getString("sexo").charAt(0);
+                    } else {
+                        sexo = '\0';
+                    }
                     return new Cliente(
                             rs.getString("nombre"),
                             rs.getString("apellido"),
-                            if (rs.getString("sexo") != null) {
-                                sexo = rs.getString("sexo").charAt(0);
-                            } else {
-                                sexo = '\0';
-                            }
+                            sexo,
                             rs.getString("dni"),
                             rs.getInt("edad"),
                             rs.getString("email"),
