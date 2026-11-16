@@ -11,8 +11,8 @@ public class Base_De_Datos {
     public static Connection CreaConexion() {
 
         try {
-            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "18122005");
             Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "mypasswordforroot");
 
             Iniciar_DB.crearTablasHotel();
 

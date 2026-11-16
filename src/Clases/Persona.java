@@ -22,6 +22,17 @@ public abstract class Persona {
         this.domicilio=domicilio;
         this.password=password;
     }
+
+    public Persona(String nombre, String apellido, char sexo, String dni, int edad, String email,String domicilio) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.sexo = sexo;
+        this.dni = dni;
+        this.edad = edad;
+        this.email = email;
+        this.domicilio=domicilio;
+    }
+
     public Persona (String dni,String email, int contrasenia){
         this.password = contrasenia;
         this.email = email;

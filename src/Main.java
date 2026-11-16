@@ -1,6 +1,7 @@
 import Base_de_datos.Base_De_Datos;
 import Clases.*;
 import Enums.TipoHabitacion;
+import Menues.MenuPrincipal;
 
 import java.sql.Connection;
 
@@ -14,9 +15,7 @@ public class Main {
         Reserva reserva1 = new Reserva(habitacion1, cliente1, 4);
 
 
-        System.out.println(reserva1.getValorEstadia());
-
-        Connection conexion = Base_De_Datos.CreaConexion();
+        MenuPrincipal.menu();
 
 
     }

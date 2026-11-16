@@ -1,17 +1,24 @@
 package Interfaces;
 
 import Base_de_datos.Base_De_Datos;
+import Base_de_datos.UsuariosDAO;
+import Clases.Cliente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public interface IPersonaDAO {
 
-    boolean noExisteDni (String dniIngresado);
+    static boolean noExisteDni(String dniIngresado) {
+
+        ArrayList<Cliente> personas = UsuariosDAO.listarClientes();
+
+    }
 
     static boolean ExisteContraseña(int contraseña) {
         String sql = ("SELECT contrasenia FROM cliente WHERE contrasenia=?");

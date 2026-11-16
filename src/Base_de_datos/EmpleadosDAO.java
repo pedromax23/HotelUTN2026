@@ -112,28 +112,5 @@ public class EmpleadosDAO implements IPersonaDAO {
         return null;
     }
 
-    @Override
-    public boolean noExisteDni(String dniIngresado) {
-
-        String sql = ("SELECT dni FROM cliente WHERE dni=?");
-
-        try (Connection conexion = Base_De_Datos.CreaConexion();
-
-             PreparedStatement ps = conexion.prepareStatement(sql);) {
-             ps.setString(1, dniIngresado);
-
-             try (ResultSet rs = ps.executeQuery()) {
-                 return !rs.next();
-             }
-
-        } catch (SQLException ex) {
-
-            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error al verificar el DNI ");
-
-        }
-        return false;
-
-    }
 
 }

@@ -4,6 +4,7 @@ import Base_de_datos.UsuariosDAO;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.DniExiste;
 import Exceptions.EmailNoValido;
+import Interfaces.IPersonaDAO;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -19,18 +20,17 @@ public class ValidacionUsuario {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         boolean flag = matcher.matches();
 
-        // Validar si el email ya existe
-        boolean flag1 = UsuariosDAO.NoExisteEmail(email);
+
 
         try {
-            if ((!flag) || (!flag1)) {
-                throw new EmailNoValido("El email no es valido");
+            if ((!flag)) {
+                throw new EmailNoValido();
             }
         } catch (EmailNoValido e) {
             System.out.println(e.getMessage());
         }
 
-        return (flag1 && flag);
+        return (flag);
 
     }
 
@@ -40,7 +40,7 @@ public class ValidacionUsuario {
         boolean esDni = dni.matches("^\\d{7,8}$");
 
         // Validar si el dni ya existe
-        boolean estaEnDb = UsuariosDAO.NoExisteDni(dni);
+        boolean estaEnDb = IPersonaDAO.noExisteDni(dni);
 
         try {
             if ((!esDni) || (!estaEnDb)) {
@@ -67,7 +67,7 @@ public class ValidacionUsuario {
 
         try {
             if((!isValid) || (!passMatch)) {
-                throw new ContraseñaNoCoincide("La contraseña no es valida");
+                throw new ContraseñaNoCoincide();
             }
         }catch (ContraseñaNoCoincide e){
             System.out.println(e.getMessage());

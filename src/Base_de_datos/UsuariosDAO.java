@@ -4,10 +4,8 @@ import Clases.Cliente;
 import Interfaces.IPersonaDAO;
 import com.sun.tools.javac.Main;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,27 +65,53 @@ public class UsuariosDAO implements IPersonaDAO {
         }
     }
 
-    public static boolean NoExisteEmail(String email) {
+    public static ArrayList<Cliente> listarClientes() {
 
-        String sql = "SELECT email FROM cliente WHERE email = ?";
+        String sql = "SELECT * FROM cliente";
 
-        try (Connection conexion = Base_De_Datos.CreaConexion();
-            PreparedStatement ps = conexion.prepareStatement(sql)) {
+        try {
+            Connection conexion = Base_De_Datos.CreaConexion();
 
-            ps.setString(1, email);
+            Statement st = conexion.createStatement();
+            st.executeQuery(sql);
 
-            try (ResultSet rs = ps.executeQuery()) {
-            return !rs.next();
+            ResultSet rs = st.getResultSet();
+
+            ArrayList<Cliente> clientes = new ArrayList<>();
+            while (rs.next()) {
+
+                String sexoStr = rs.getString("sexo");
+                char sexo = ' ';
+
+                if (sexoStr != null && !sexoStr.isEmpty()) {
+                    sexo = sexoStr.charAt(0);
+                }
+
+                System.out.println("Sexo (char): " + sexo);
+                Cliente cliente = new Cliente(rs.getString("nombre"), rs.getString("apellido"), sexo, rs.getString("dni"), rs.getInt("edad"), rs.getString("email"), rs.getString("domicilio"));
+
             }
 
-        } catch (SQLException ex) {
-             Logger.getLogger(Base_De_Datos.class.getName())
-                     .log(Level.SEVERE, null, ex);
+            return clientes;
 
-             System.out.println("Error al verificar el Email");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
 
-        return false;
+        return null;
+    }
+
+    public static boolean NoExisteEmail(String email) {
+
+        ArrayList<Cliente> clientes = listarClientes();
+
+        for(Cliente cliente : clientes) {
+            if(cliente.getEmail().equals(email)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static Cliente buscarPorEmail(String email) {
@@ -130,28 +154,6 @@ public class UsuariosDAO implements IPersonaDAO {
         }
 
         return null;
-    }
-
-    @Override
-    public boolean noExisteDni(String dniIngresado) {
-        String sql = ("SELECT dni FROM cliente WHERE dni=?");
-
-        try (Connection conexion = Base_De_Datos.CreaConexion();
-
-             PreparedStatement ps = conexion.prepareStatement(sql);) {
-            ps.setString(1, dniIngresado);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return !rs.next();
-            }
-
-        } catch (SQLException ex) {
-
-            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error al verificar el DNI ");
-
-        }
-        return false;
     }
 
 }

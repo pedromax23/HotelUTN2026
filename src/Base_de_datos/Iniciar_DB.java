@@ -3,6 +3,7 @@ package Base_de_datos;
 import com.sun.tools.javac.Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -15,7 +16,14 @@ public class Iniciar_DB {
         try {
             Connection conexion = Base_De_Datos.CreaConexion();
 
+            if(conexion == null) return;
             Statement stmt = conexion.createStatement();
+
+            PreparedStatement ps = conexion.prepareStatement("CREATE DATABASE IF NOT EXISTS hotel2026");
+            ps.executeUpdate();
+
+            PreparedStatement ps1 = conexion.prepareStatement("USE hotel2026");
+            ps1.executeUpdate();
 
             String sqlCliente = "CREATE TABLE IF NOT EXISTS cliente (" +
                     "dni VARCHAR(20) PRIMARY KEY, " +

@@ -11,7 +11,8 @@ public class MenuPrincipal {
 
         Scanner sc = new Scanner(System.in);
         String email = Sesion.recuperarSesion();
-        if (email.equals(null)){
+        System.out.println(email);
+        if (email == null){
                 System.out.println("1 - Crear Cuenta\n2 - Iniciar Sesion");
                 int opcion = sc.nextInt();
                 sc.nextLine();
