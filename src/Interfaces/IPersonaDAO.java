@@ -1,7 +1,7 @@
 package Interfaces;
 
-import Base_de_datos.Base_De_Datos;
-import Base_de_datos.UsuariosDAO;
+import Base_de_datos.ConexionDB;
+import Base_de_datos.ClienteDAO;
 import Clases.Cliente;
 
 import java.sql.Connection;
@@ -16,14 +16,16 @@ public interface IPersonaDAO {
 
     static boolean noExisteDni(String dniIngresado) {
 
-        ArrayList<Cliente> personas = UsuariosDAO.listarClientes();
+        ArrayList<Cliente> personas = ClienteDAO.listarClientes();
+
+        return true;
 
     }
 
     static boolean ExisteContraseña(int contraseña) {
         String sql = ("SELECT contrasenia FROM cliente WHERE contrasenia=?");
 
-        try (Connection conexion = Base_De_Datos.CreaConexion();
+        try (Connection conexion = ConexionDB.obtenerConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)){
 
             ps.setInt(1, contraseña);
@@ -33,7 +35,7 @@ public interface IPersonaDAO {
 
         } catch (SQLException ex) {
 
-            Logger.getLogger(Base_De_Datos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error al verificar la Contraseña");
 
         }

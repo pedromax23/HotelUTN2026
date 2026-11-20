@@ -1,11 +1,11 @@
 package Menues;
 
-import Base_de_datos.UsuariosDAO;
+import Base_de_datos.ClienteDAO;
 import Clases.Persona;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.EmailNoValido;
 import Interfaces.IPersonaDAO;
-import Validaciones.ValidacionUsuario;
+import Validaciones.ValidacionPersona;
 
 import java.util.Scanner;
 
@@ -20,18 +20,16 @@ public class MenuUsuario {
 
             System.out.println("Ingrese un email: ");
             email = sc.nextLine();
-            sc.nextLine();
 
-        } while (!ValidacionUsuario.validarEmail(email));
+        } while (!ValidacionPersona.validarEmail(email));
 
         String dni;
         do {
 
             System.out.println("Ingrese su DNI: ");
             dni = sc.nextLine();
-            sc.nextLine();
 
-        } while (!ValidacionUsuario.validarDni(dni));
+        } while (!ValidacionPersona.validarDni(dni));
 
         String password;
         String confirmPass;
@@ -49,10 +47,10 @@ public class MenuUsuario {
             confirmPass = sc.nextLine();
             sc.nextLine();
 
-        }while(!ValidacionUsuario.validarPass(password, confirmPass));
+        }while(!ValidacionPersona.validarPass(password, confirmPass));
 
         int passHash = password.hashCode();
-        UsuariosDAO.registrarUsuario(dni, email, passHash);
+        ClienteDAO.registrarUsuario(dni, email, passHash);
 
         CargaDatos(dni);
 
@@ -82,7 +80,7 @@ public class MenuUsuario {
         String domicilio = sc.nextLine();
         sc.nextLine();
 
-        UsuariosDAO.registrarDatosUsuario(dni,nombre,apellido,sexo,edad,domicilio);
+        ClienteDAO.registrarDatosUsuario(dni,nombre,apellido,sexo,edad,domicilio);
     }
 
     public static void iniciarSession() {
@@ -98,7 +96,7 @@ public class MenuUsuario {
             email = sc.nextLine();
             sc.nextLine();
 
-            flag =! (UsuariosDAO.NoExisteEmail(email));
+            flag =! (ClienteDAO.NoExisteEmail(email));
 
             try {
                 if (flag) {
@@ -130,7 +128,7 @@ public class MenuUsuario {
         }while (flag);
 
         System.out.println("Iniciando session...");
-        Persona persona = UsuariosDAO.buscarPorEmail(email);
+        Persona persona = ClienteDAO.buscarPorEmail(email);
 
     }
 

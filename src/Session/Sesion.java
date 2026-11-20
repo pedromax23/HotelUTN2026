@@ -1,4 +1,4 @@
-package Menues;
+package Session;
 
 import java.io.*;
 
@@ -6,6 +6,7 @@ public class Sesion {
 
     private static final String ARCHIVO = "sesion.txt";
 
+    // Guarda la session en el archivo txt
     public static void guardarSesion(String email) {
 
         try (BufferedWriter bw = new BufferedWriter(

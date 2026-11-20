@@ -1,6 +1,5 @@
 package Validaciones;
 
-import Base_de_datos.UsuariosDAO;
 import Exceptions.ContraseñaNoCoincide;
 import Exceptions.DniExiste;
 import Exceptions.EmailNoValido;
@@ -9,7 +8,7 @@ import Interfaces.IPersonaDAO;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class ValidacionUsuario {
+public class ValidacionPersona {
 
     public static boolean validarEmail(String email) {
 
@@ -19,8 +18,6 @@ public class ValidacionUsuario {
 
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         boolean flag = matcher.matches();
-
-
 
         try {
             if ((!flag)) {

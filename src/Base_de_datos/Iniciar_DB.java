@@ -1,84 +1,51 @@
 package Base_de_datos;
 
-import com.sun.tools.javac.Main;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Iniciar_DB {
 
-    public static void crearTablasHotel() {
+    private static final String RUTA_SCRIPT = "./schema.sql";
 
-        try {
-            Connection conexion = Base_De_Datos.CreaConexion();
+    public static void inicializar() {
+        System.out.println("Verificando e inicializando la base de datos...");
 
-            if(conexion == null) return;
-            Statement stmt = conexion.createStatement();
+        try (Connection conexion = ConexionDB.obtenerConexion();
+             Statement statement = conexion.createStatement();
+             BufferedReader br = new BufferedReader(new FileReader(RUTA_SCRIPT))) {
 
-            PreparedStatement ps = conexion.prepareStatement("CREATE DATABASE IF NOT EXISTS hotel2026");
-            ps.executeUpdate();
+            StringBuilder sqlBuilder = new StringBuilder();
+            String linea;
 
-            PreparedStatement ps1 = conexion.prepareStatement("USE hotel2026");
-            ps1.executeUpdate();
+            while ((linea = br.readLine()) != null) {
+                // Ignorar comentarios SQL y líneas vacías
+                linea = linea.trim();
+                if (linea.startsWith("--") || linea.startsWith("//") || linea.isEmpty()) {
+                    continue;
+                }
 
-            String sqlCliente = "CREATE TABLE IF NOT EXISTS cliente (" +
-                    "dni VARCHAR(20) PRIMARY KEY, " +
-                    "nombre VARCHAR(50) NULL, " +
-                    "apellido VARCHAR(50) NULL, " +
-                    "sexo CHAR(1)  NULL, " +
-                    "edad INT  NULL, " +
-                    "email VARCHAR(100) NOT NULL, " +
-                    "domicilio VARCHAR(150)  NULL, " +
-                    "contrasenia INT NOT NULL" +
-                    ")";
-            stmt.execute(sqlCliente);
+                sqlBuilder.append(linea);
 
-            String sqlEmpleado = "CREATE TABLE IF NOT EXISTS empleado (" +
-                    "dni VARCHAR(20) PRIMARY KEY, " +
-                    "nombre VARCHAR(50) NULL, " +
-                    "apellido VARCHAR(50) NULL, " +
-                    "sexo CHAR(1)  NULL, " +
-                    "edad INT  NULL, " +
-                    "email VARCHAR(100) NOT NULL, " +
-                    "domicilio VARCHAR(150)  NULL, " +
-                    "contrasenia INT NOT NULL, " +
-                    "sueldo DOUBLE NOT NULL" +
-                    ")";
-            stmt.execute(sqlEmpleado);
+                // Si encontramos un punto y coma, ejecutamos la sentencia acumulada
+                if (linea.endsWith(";")) {
+                    String sql = sqlBuilder.toString().replace(";", "").trim();
+                    if (!sql.isEmpty()) {
+                        statement.execute(sql);
+                    }
+                    sqlBuilder.setLength(0); // Limpiar buffer para la siguiente sentencia
+                }
+            }
 
-            String sqlHabitacion = "CREATE TABLE IF NOT EXISTS habitacion (" +
-                    "numeroHabitacion INT PRIMARY KEY, " +
-                    "tipo VARCHAR(50) NOT NULL, " +
-                    "disponible BOOLEAN NOT NULL, " +
-                    "enUso BOOLEAN NOT NULL" +
-                    ")";
-            stmt.execute(sqlHabitacion);
+            System.out.println("Base de datos inicializada correctamente.");
 
-            String sqlReserva = "CREATE TABLE IF NOT EXISTS reserva (" +
-                    "idReserva INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, " +
-                    "dni_cliente VARCHAR(20) NOT NULL, " +
-                    "numeroHabitacion INT NOT NULL, " +
-                    "diasEstadia INT NOT NULL, " +
-                    "valorEstadia INT NOT NULL, " +
-                    "FOREIGN KEY (dni_cliente) REFERENCES cliente(dni), " +
-                    "FOREIGN KEY (numeroHabitacion) REFERENCES habitacion(numeroHabitacion)" +
-                    ")";
-            stmt.execute(sqlReserva);
-
-            stmt.close();
-            conexion.close();
-            System.out.println("Las tablas del hotel se crearon (o ya existían) ");
-
-        } catch (SQLException ex) {
-
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error al cargar las tablas");
-
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo de script SQL: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error de SQL durante la inicialización: " + e.getMessage());
         }
     }
-
 }

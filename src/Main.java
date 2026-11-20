@@ -1,21 +1,23 @@
-import Base_de_datos.Base_De_Datos;
-import Clases.*;
-import Enums.TipoHabitacion;
+import Base_de_datos.ConexionDB;
+import Base_de_datos.Iniciar_DB;
 import Menues.MenuPrincipal;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Habitacion habitacion1 = new Habitacion(1, true, TipoHabitacion.STANDARD, false);
-        Cliente cliente1 = new Cliente("juan","perez",'H',"32333222",22,"perro@gmail.com","maipu3432",43562523);
+        //MenuPrincipal.menu();
 
-        Reserva reserva1 = new Reserva(habitacion1, cliente1, 4);
+        // 1. Inicializar la estructura de las tablas si no existen
+        Iniciar_DB.inicializar();
 
-
-        MenuPrincipal.menu();
+        // 2. Iniciar el flujo normal de la aplicación (Menú de Login, etc.)
+        System.out.println("\n--- BIENVENIDO AL SISTEMA DE GESTIÓN HOTELERA ---");
+        // ... llamado a tus menús o controladores
 
 
     }
