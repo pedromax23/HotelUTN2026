@@ -81,6 +81,9 @@ public class MenuPrincipal {
 
             System.out.println("Bienvenido/a, cliente.");
 
+            MenuCliente menuCliente = new MenuCliente(scanner);
+            menuCliente.menu();
+
         } else {
 
             System.out.println("Email o contrasena incorrectos.");

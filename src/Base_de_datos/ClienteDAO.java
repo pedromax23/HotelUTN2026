@@ -129,4 +129,28 @@ public class ClienteDAO {
         }
         return clientes;
     }
+
+    public String obtenerDniPorEmail(String email) {
+
+        String sql = "SELECT dni FROM cliente WHERE email = ?";
+
+        try (Connection conn = ConexionDB.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+                    return rs.getString("dni");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener DNI: " + e.getMessage());
+        }
+
+        return null;
+    }
+
 }
