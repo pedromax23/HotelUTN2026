@@ -10,7 +10,7 @@ import java.util.List;
 public class EmpleadoDAO {
 
     // Crear un nuevo empleado (ADMINISTRADOR o RECEPCIONISTA)
-    public boolean crearEmpleado(String dni, String email, String contrasenia,
+    public static boolean crearEmpleado(String dni, String email, String contrasenia,
                                  String nombre, String apellido, String rol) {
         String sql = "INSERT INTO empleado (dni, email, contrasenia, nombre, apellido, rol) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -53,7 +53,7 @@ public class EmpleadoDAO {
     }
 
     // Autentica empleado y devuelve su rol ("ADMINISTRADOR" / "RECEPCIONISTA") o null si falla
-    public String obtenerRolSiCredencialesValidas(String email, String contrasenia) {
+    public static String obtenerRolSiCredencialesValidas(String email, String contrasenia) {
         String sql = "SELECT rol FROM empleado WHERE email = ? AND contrasenia = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();
@@ -74,7 +74,7 @@ public class EmpleadoDAO {
     }
 
     // Verificar si ya existe un empleado con ese DNI o email
-    public boolean existePorDniOEmail(String dni, String email) {
+    public static boolean existePorDniOEmail(String dni, String email) {
         String sql = "SELECT 1 FROM empleado WHERE dni = ? OR email = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();
@@ -93,7 +93,7 @@ public class EmpleadoDAO {
     }
 
     // Actualizar rol de un empleado
-    public boolean actualizarRol(String dni, String nuevoRol) {
+    public static boolean actualizarRol(String dni, String nuevoRol) {
         String sql = "UPDATE empleado SET rol = ? WHERE dni = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();
@@ -110,7 +110,7 @@ public class EmpleadoDAO {
     }
 
     // Listar empleados
-    public List<String> listarEmpleados() {
+    public static List<String> listarEmpleados() {
         String sql = "SELECT id_empleado, dni, nombre, apellido, email, rol FROM empleado ORDER BY id_empleado";
         List<String> empleados = new ArrayList<>();
 

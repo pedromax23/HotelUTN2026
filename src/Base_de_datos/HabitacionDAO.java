@@ -12,7 +12,7 @@ import java.util.List;
 public class HabitacionDAO {
 
     // Listar habitaciones no disponibles y su motivo (limpieza, mantenimiento, etc.)
-    public List<String> listarHabitacionesNoDisponibles() {
+    public static List<String> listarHabitacionesNoDisponibles() {
         String sql = "SELECT numero, tipo, estado, motivo_no_disponibilidad " +
                 "FROM habitacion " +
                 "WHERE estado <> 'DISPONIBLE'";
@@ -41,7 +41,7 @@ public class HabitacionDAO {
     }
 
     // Cambiar estado y motivo (si pasa a DISPONIBLE, limpia el motivo)
-    public boolean actualizarEstadoHabitacion(int numero, String nuevoEstado, String motivo) {
+    public static boolean actualizarEstadoHabitacion(int numero, String nuevoEstado, String motivo) {
         String sql = "UPDATE habitacion SET estado = ?, motivo_no_disponibilidad = ? WHERE numero = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();

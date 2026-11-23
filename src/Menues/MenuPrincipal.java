@@ -11,8 +11,6 @@ import java.util.Scanner;
 public class MenuPrincipal {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final ClienteDAO clienteDAO = new ClienteDAO();
-    private static final EmpleadoDAO empleadoDAO = new EmpleadoDAO();
 
     public static void menu() {
         int opcion;

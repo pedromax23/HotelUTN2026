@@ -107,7 +107,7 @@ public class ClienteDAO {
     }
 
     // Listar clientes (resumen útil para consola o reportes)
-    public List<String> listarClientesResumen() {
+    public static List<String> listarClientesResumen() {
         String sql = "SELECT dni, nombre, apellido, email, origen FROM cliente ORDER BY apellido, nombre";
         List<String> clientes = new ArrayList<>();
 

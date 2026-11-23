@@ -4,6 +4,7 @@ import Base_de_datos.ClienteDAO;
 import Base_de_datos.EmpleadoDAO;
 import Menues.MenuAdministrador;
 import Menues.MenuCliente;
+import Menues.MenuPrincipal;
 import Menues.MenuRecepcionista;
 import Session.Sesion;
 
@@ -11,9 +12,7 @@ import java.util.Scanner;
 
 public class AuthService {
 
-    private static final Scanner scanner = new Scanner(System.in);
     private static final ClienteDAO clienteDAO = new ClienteDAO();
-    private static final EmpleadoDAO empleadoDAO = new EmpleadoDAO();
 
     public static void login(String email, String contrasenia) {
 
@@ -23,7 +22,7 @@ public class AuthService {
         }
 
         // Primero comprobamos si es empleado
-        String rol = empleadoDAO.obtenerRolSiCredencialesValidas(
+        String rol = EmpleadoDAO.obtenerRolSiCredencialesValidas(
                 email, contrasenia);
 
         if (rol != null) {
@@ -62,8 +61,7 @@ public class AuthService {
 
             System.out.println("Bienvenido/a, cliente.");
 
-            MenuCliente menuCliente = new MenuCliente(scanner);
-            menuCliente.menu();
+            MenuPrincipal.menu();
 
         } else {
 

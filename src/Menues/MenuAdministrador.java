@@ -4,6 +4,13 @@ package Menues;
 import Base_de_datos.EmpleadoDAO;
 import Base_de_datos.HabitacionDAO;
 import Base_de_datos.ClienteDAO;
+import Enums.EstadoHabitacion;
+import Enums.RolEnum;
+import Exceptions.DniExiste;
+import Exceptions.EmailNoValido;
+import Logica.ClienteService;
+import Logica.EmpleadoService;
+import Logica.HabitacionService;
 import Session.Sesion;
 
 import java.util.List;
@@ -12,17 +19,11 @@ import java.util.Scanner;
 public class MenuAdministrador {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private final EmpleadoDAO empleadoDAO;
-    private final HabitacionDAO habitacionDAO;
-    private final ClienteDAO clienteDAO;
+    private static final EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+    private static final HabitacionDAO habitacionDAO = new HabitacionDAO();
+    private static final ClienteDAO clienteDAO = new ClienteDAO();
 
-    public MenuAdministrador() {
-        this.empleadoDAO = new EmpleadoDAO();
-        this.habitacionDAO = new HabitacionDAO();
-        this.clienteDAO = new ClienteDAO();
-    }
-
-    public void menu() {
+    public void menu() throws EmailNoValido {
 
         int opcion;
 
@@ -69,8 +70,7 @@ public class MenuAdministrador {
         } while (opcion != 0);
     }
 
-    private void crearEmpleado() {
-
+    private void crearEmpleado() throws EmailNoValido {
         System.out.println("\n--- CREAR EMPLEADO ---");
 
         System.out.print("DNI: ");
@@ -88,50 +88,21 @@ public class MenuAdministrador {
         System.out.print("Contrasena: ");
         String contrasenia = scanner.nextLine();
 
-        if (dni.isEmpty() || nombre.isEmpty() ||
-                apellido.isEmpty() || email.isEmpty() ||
-                contrasenia.isEmpty()) {
-
-            System.out.println("Todos los campos son obligatorios.");
-            return;
-        }
-
-        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            System.out.println("Email invalido.");
-            return;
-        }
-
-        if (empleadoDAO.existePorDniOEmail(dni, email)) {
-            System.out.println("El DNI o email ya estan registrados.");
-            return;
-        }
-
-        System.out.println("Seleccione el rol:");
-        System.out.println("1. ADMINISTRADOR");
-        System.out.println("2. RECEPCIONISTA");
-
-        int opcionRol = leerOpcion();
-
-        String rol;
-
-        if (opcionRol == 1) {
-            rol = "ADMINISTRADOR";
-        } else if (opcionRol == 2) {
-            rol = "RECEPCIONISTA";
-        } else {
+        RolEnum rol = leerRolEmpleado();
+        if (rol == null) {
             System.out.println("Rol invalido.");
             return;
         }
 
-        boolean creado = empleadoDAO.crearEmpleado(
-                dni, email, contrasenia,
-                nombre, apellido, rol
-        );
-
-        if (creado) {
-            System.out.println("Empleado creado correctamente.");
-        } else {
-            System.out.println("No se pudo crear el empleado.");
+        try {
+            boolean creado = EmpleadoService.registrarEmpleado(
+                    dni, nombre, apellido, email, contrasenia, rol
+            );
+            System.out.println(creado
+                    ? "Empleado creado correctamente."
+                    : "No se pudo crear el empleado.");
+        } catch (EmailNoValido | DniExiste | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -139,7 +110,7 @@ public class MenuAdministrador {
 
         System.out.println("\n--- EMPLEADOS ---");
 
-        List<String> empleados = empleadoDAO.listarEmpleados();
+        List<String> empleados = EmpleadoService.listarEmpleados();
 
         if (empleados.isEmpty()) {
             System.out.println("No hay empleados registrados.");
@@ -163,30 +134,25 @@ public class MenuAdministrador {
 
         int opcion = leerOpcion();
 
-        String nuevoRol;
+        RolEnum nuevoRol;
 
         if (opcion == 1) {
-            nuevoRol = "ADMINISTRADOR";
+            nuevoRol = RolEnum.ADMINISTRADOR;
         } else if (opcion == 2) {
-            nuevoRol = "RECEPCIONISTA";
+            nuevoRol = RolEnum.RECEPCIONISTA;
         } else {
             System.out.println("Rol invalido.");
             return;
         }
 
-        if (empleadoDAO.actualizarRol(dni, nuevoRol)) {
-            System.out.println("Rol actualizado correctamente.");
-        } else {
-            System.out.println("No se pudo actualizar el rol.");
-        }
+        EmpleadoService.cambiarRol(dni, nuevoRol);
     }
 
     private void listarHabitacionesNoDisponibles() {
 
         System.out.println("\n--- HABITACIONES NO DISPONIBLES ---");
 
-        List<String> habitaciones =
-                habitacionDAO.listarHabitacionesNoDisponibles();
+        List<String> habitaciones = HabitacionService.listarHabitacionesNoDisponibles();
 
         if (habitaciones.isEmpty()) {
             System.out.println("Todas las habitaciones estan disponibles.");
@@ -203,9 +169,7 @@ public class MenuAdministrador {
         System.out.println("\nMODIFICAR ESTADO DE HABITACION");
 
         System.out.print("Numero de habitacion: ");
-
         int numero;
-
         try {
             numero = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
@@ -220,17 +184,17 @@ public class MenuAdministrador {
 
         int opcion = leerOpcion();
 
-        String estado;
+        EstadoHabitacion estado;
 
         switch (opcion) {
             case 1:
-                estado = "DISPONIBLE";
+                estado = EstadoHabitacion.DISPONIBLE;
                 break;
             case 2:
-                estado = "LIMPIEZA";
+                estado = EstadoHabitacion.LIMPIEZA;
                 break;
             case 3:
-                estado = "MANTENIMIENTO";
+                estado = EstadoHabitacion.MANTENIMIENTO;
                 break;
             default:
                 System.out.println("Estado invalido.");
@@ -238,8 +202,7 @@ public class MenuAdministrador {
         }
 
         String motivo = null;
-
-        if (!estado.equals("DISPONIBLE")) {
+        if (estado != EstadoHabitacion.DISPONIBLE) {
             System.out.print("Ingrese el motivo: ");
             motivo = scanner.nextLine().trim();
 
@@ -249,13 +212,11 @@ public class MenuAdministrador {
             }
         }
 
-        if (habitacionDAO.actualizarEstadoHabitacion(
-                numero, estado, motivo)) {
-
-            System.out.println("Estado actualizado correctamente.");
-
+        boolean actualizado = HabitacionService.cambiarEstadoHabitacion(numero, estado, motivo);
+        if(actualizado) {
+            System.out.println("Habitacion modificada correctamente.");
         } else {
-            System.out.println("No se pudo actualizar la habitacion.");
+            System.out.println("No se pudo modificar el estado habitacion.");
         }
     }
 
@@ -263,7 +224,7 @@ public class MenuAdministrador {
 
         System.out.println("\nCLIENTES REGISTRADOS");
 
-        List<String> clientes = clienteDAO.listarClientesResumen();
+        List<String> clientes = ClienteService.listarClientesResumen();
 
         if (clientes.isEmpty()) {
             System.out.println("No hay clientes registrados.");
@@ -282,5 +243,20 @@ public class MenuAdministrador {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    private RolEnum leerRolEmpleado() {
+        System.out.println("Seleccione el rol:");
+        System.out.println("1. ADMINISTRADOR");
+        System.out.println("2. RECEPCIONISTA");
+
+        int opcionRol = leerOpcion();
+        if (opcionRol == 1) {
+            return RolEnum.ADMINISTRADOR;
+        }
+        if (opcionRol == 2) {
+            return RolEnum.RECEPCIONISTA;
+        }
+        return null;
     }
 }
