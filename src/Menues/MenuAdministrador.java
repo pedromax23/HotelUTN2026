@@ -11,6 +11,7 @@ import Exceptions.EmailNoValido;
 import Logica.ClienteService;
 import Logica.EmpleadoService;
 import Logica.HabitacionService;
+import Logica.ResultadoOperacion;
 import Session.Sesion;
 
 import java.util.List;
@@ -19,11 +20,8 @@ import java.util.Scanner;
 public class MenuAdministrador {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-    private static final HabitacionDAO habitacionDAO = new HabitacionDAO();
-    private static final ClienteDAO clienteDAO = new ClienteDAO();
 
-    public void menu() throws EmailNoValido {
+    public static void menu() {
 
         int opcion;
 
@@ -70,7 +68,7 @@ public class MenuAdministrador {
         } while (opcion != 0);
     }
 
-    private void crearEmpleado() throws EmailNoValido {
+    private static void crearEmpleado() {
         System.out.println("\n--- CREAR EMPLEADO ---");
 
         System.out.print("DNI: ");
@@ -106,7 +104,7 @@ public class MenuAdministrador {
         }
     }
 
-    private void listarEmpleados() {
+    private static void listarEmpleados() {
 
         System.out.println("\n--- EMPLEADOS ---");
 
@@ -122,7 +120,7 @@ public class MenuAdministrador {
         }
     }
 
-    private void modificarRol() {
+    private static void modificarRol() {
 
         System.out.println("\n--- MODIFICAR ROL ---");
 
@@ -148,7 +146,7 @@ public class MenuAdministrador {
         EmpleadoService.cambiarRol(dni, nuevoRol);
     }
 
-    private void listarHabitacionesNoDisponibles() {
+    private static void listarHabitacionesNoDisponibles() {
 
         System.out.println("\n--- HABITACIONES NO DISPONIBLES ---");
 
@@ -164,7 +162,7 @@ public class MenuAdministrador {
         }
     }
 
-    private void modificarEstadoHabitacion() {
+    private static void modificarEstadoHabitacion() {
 
         System.out.println("\nMODIFICAR ESTADO DE HABITACION");
 
@@ -212,15 +210,11 @@ public class MenuAdministrador {
             }
         }
 
-        boolean actualizado = HabitacionService.cambiarEstadoHabitacion(numero, estado, motivo);
-        if(actualizado) {
-            System.out.println("Habitacion modificada correctamente.");
-        } else {
-            System.out.println("No se pudo modificar el estado habitacion.");
-        }
+        ResultadoOperacion<Void> resultado = HabitacionService.cambiarEstadoHabitacion(numero, estado, motivo);
+        System.out.println(resultado.getMensaje());
     }
 
-    private void listarClientes() {
+    private static void listarClientes() {
 
         System.out.println("\nCLIENTES REGISTRADOS");
 
@@ -236,7 +230,7 @@ public class MenuAdministrador {
         }
     }
 
-    private int leerOpcion() {
+    private static int leerOpcion() {
 
         try {
             return Integer.parseInt(scanner.nextLine());
@@ -245,7 +239,7 @@ public class MenuAdministrador {
         }
     }
 
-    private RolEnum leerRolEmpleado() {
+    private static RolEnum leerRolEmpleado() {
         System.out.println("Seleccione el rol:");
         System.out.println("1. ADMINISTRADOR");
         System.out.println("2. RECEPCIONISTA");

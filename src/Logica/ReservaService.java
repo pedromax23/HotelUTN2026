@@ -30,6 +30,7 @@ public class ReservaService {
         }
 
         String email = Sesion.recuperarSesion();
+        System.out.println(email);
         if (email == null || email.trim().isEmpty()) {
             return "No hay una sesion activa.";
         }
@@ -49,6 +50,30 @@ public class ReservaService {
                 + "\nIngreso: " + fechaInicio
                 + "\nSalida: " + fechaFin
                 + "\nEstado: PENDIENTE";
+    }
+
+    public static ResultadoOperacion<Integer> confirmarReservaRecepcionista(String dni, int numeroHabitacion, LocalDate fechaInicio, LocalDate fechaFin) {
+        if (dni == null || dni.isBlank()) {
+            return ResultadoOperacion.error("No se pudo identificar al cliente.");
+        }
+        if (fechaInicio == null || fechaFin == null || fechaInicio.isBefore(LocalDate.now()) || !fechaFin.isAfter(fechaInicio)) {
+            return ResultadoOperacion.error("Las fechas ingresadas no son validas.");
+        }
+
+        List<Integer> disponibles = HabitacionDAO.buscarNumerosHabitacionesDisponibles(fechaInicio, fechaFin);
+        if (disponibles == null || disponibles.isEmpty()) {
+            return ResultadoOperacion.error("No hay habitaciones disponibles para esas fechas.");
+        }
+        if (!disponibles.contains(numeroHabitacion)) {
+            return ResultadoOperacion.error("La habitacion seleccionada no esta disponible.");
+        }
+
+        boolean reservada = ReservaDAO.crearReserva(dni.trim(), numeroHabitacion, fechaInicio, fechaFin);
+        if (!reservada) {
+            return ResultadoOperacion.error("No se pudo realizar la reserva.");
+        }
+
+        return ResultadoOperacion.ok("¡Reserva realizada correctamente!", numeroHabitacion);
     }
 
     public static List<String> listarReservasCliente(String dni) {

@@ -35,15 +35,11 @@ public class AuthService {
             switch (rol.toUpperCase()) {
 
                 case "ADMINISTRADOR":
-                    MenuAdministrador menuAdmin =
-                            new MenuAdministrador();
-                    menuAdmin.menu();
+                    MenuAdministrador.menu();
                     break;
 
                 case "RECEPCIONISTA":
-                    MenuRecepcionista menuRecepcionista =
-                            new MenuRecepcionista();
-                    menuRecepcionista.menu();
+                    MenuRecepcionista.menu();
                     break;
 
                 default:
@@ -61,7 +57,7 @@ public class AuthService {
 
             System.out.println("Bienvenido/a, cliente.");
 
-            MenuPrincipal.menu();
+            MenuCliente.menu();
 
         } else {
 

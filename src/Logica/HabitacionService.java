@@ -25,25 +25,35 @@ public class HabitacionService {
         return HabitacionDAO.listarHabitacionesNoDisponibles();
     }
 
-    public static boolean cambiarEstadoHabitacion(int numero, EstadoHabitacion nuevoEstado, String motivo) {
-        if (numero <= 0 || nuevoEstado == null) {
-            return false;
+    public static ResultadoOperacion<Void> cambiarEstadoHabitacion(int numero, EstadoHabitacion nuevoEstado, String motivo) {
+        if (numero <= 0) {
+            return ResultadoOperacion.error("Numero de habitacion invalido.");
+        }
+
+        if (nuevoEstado == null) {
+            return ResultadoOperacion.error("Estado invalido.");
         }
 
         String motivoLimpio = null;
 
         if (nuevoEstado != EstadoHabitacion.DISPONIBLE) {
             if (motivo == null || motivo.isBlank()) {
-                return false;
+                return ResultadoOperacion.error("Debe ingresar un motivo para el estado " + nuevoEstado + ".");
             }
             motivoLimpio = motivo.trim();
         }
 
-        return HabitacionDAO.actualizarEstadoHabitacion(
+        boolean actualizado = HabitacionDAO.actualizarEstadoHabitacion(
                 numero,
                 nuevoEstado.name(),
                 motivoLimpio
         );
+
+        if (!actualizado) {
+            return ResultadoOperacion.error("No se pudo actualizar la habitacion en la base de datos.");
+        }
+
+        return ResultadoOperacion.ok("Estado de la habitacion #" + numero + " actualizado a " + nuevoEstado + ".");
     }
 
 }

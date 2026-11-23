@@ -7,6 +7,7 @@ import Base_de_datos.ReservaDAO;
 import Logica.ClienteService;
 import Logica.HabitacionService;
 import Logica.ReservaService;
+import Logica.ResultadoOperacion;
 import Session.Sesion;
 
 import java.time.LocalDate;
@@ -17,17 +18,8 @@ import java.util.Scanner;
 public class MenuRecepcionista {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private final ClienteDAO clienteDAO;
-    private final HabitacionDAO habitacionDAO;
-    private final ReservaDAO reservaDAO;
 
-    public MenuRecepcionista() {
-        this.clienteDAO = new ClienteDAO();
-        this.habitacionDAO = new HabitacionDAO();
-        this.reservaDAO = new ReservaDAO();
-    }
-
-    public void menu() {
+    public static void menu() {
 
         int opcion;
 
@@ -74,7 +66,7 @@ public class MenuRecepcionista {
         } while (opcion != 0);
     }
 
-    private void registrarReserva() {
+    private static void registrarReserva() {
 
         System.out.println("\nREGISTRAR RESERVA");
 
@@ -111,11 +103,11 @@ public class MenuRecepcionista {
         System.out.print("Numero de habitacion: ");
         int numeroHabitacion = leerOpcion();
 
-        String resultado = ReservaService.confirmarReserva(numeroHabitacion, inicio, fin);
-        System.out.println(resultado);
+        ResultadoOperacion<Integer> resultado = ReservaService.confirmarReservaRecepcionista(dni, numeroHabitacion, inicio, fin);
+        System.out.println(resultado.getMensaje());
     }
 
-    private void consultarDisponibilidad() {
+    private static void consultarDisponibilidad() {
 
         System.out.println("\n--- CONSULTAR DISPONIBILIDAD ---");
 
@@ -142,7 +134,7 @@ public class MenuRecepcionista {
         }
     }
 
-    private void realizarCheckIn() {
+    private static void realizarCheckIn() {
 
         System.out.println("\n--- CHECK-IN ---");
         System.out.print("ID de la reserva: ");
@@ -163,7 +155,7 @@ public class MenuRecepcionista {
         }
     }
 
-    private void realizarCheckOut() {
+    private static void realizarCheckOut() {
 
         System.out.println("\n--- CHECK-OUT ---");
         System.out.print("ID de la reserva: ");
@@ -184,7 +176,7 @@ public class MenuRecepcionista {
         }
     }
 
-    private void listarClientes() {
+    private static void listarClientes() {
 
         System.out.println("\n CLIENTES");
         List<String> clientes = ClienteService.listarClientesResumen();
@@ -199,7 +191,7 @@ public class MenuRecepcionista {
         }
     }
 
-    private void listarHabitacionesNoDisponibles() {
+    private static void listarHabitacionesNoDisponibles() {
 
         System.out.println("\n--- HABITACIONES NO DISPONIBLES ---");
         List<String> habitaciones = HabitacionService.listarHabitacionesNoDisponibles();
@@ -214,7 +206,7 @@ public class MenuRecepcionista {
         }
     }
 
-    private LocalDate leerFecha(String mensaje) {
+    private static LocalDate leerFecha(String mensaje) {
 
         System.out.print(mensaje);
         try {
@@ -225,7 +217,7 @@ public class MenuRecepcionista {
         }
     }
 
-    private int leerOpcion() {
+    private static int leerOpcion() {
 
         try {
             return Integer.parseInt(scanner.nextLine());

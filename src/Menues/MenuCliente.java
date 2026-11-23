@@ -14,19 +14,9 @@ import java.util.Scanner;
 
 public class MenuCliente {
 
-    private final Scanner scanner;
-    private final ClienteDAO clienteDAO;
-    private final HabitacionDAO habitacionDAO;
-    private final ReservaDAO reservaDAO;
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public MenuCliente(Scanner scanner) {
-        this.scanner = scanner;
-        this.clienteDAO = new ClienteDAO();
-        this.habitacionDAO = new HabitacionDAO();
-        this.reservaDAO = new ReservaDAO();
-    }
-
-    public void menu() {
+    public static void menu() {
 
         int opcion;
 
@@ -67,7 +57,7 @@ public class MenuCliente {
         } while (opcion != 0);
     }
 
-    private void reservarHabitacion() {
+    private static void reservarHabitacion() {
         System.out.println("\nRESERVAR HABITACION");
 
         System.out.print("Fecha de ingreso (AAAA-MM-DD): ");
@@ -117,7 +107,7 @@ public class MenuCliente {
         System.out.println(resultado);
     }
 
-    private void consultarReservas() {
+    private static void consultarReservas() {
         System.out.println("\n===== MIS RESERVAS =====");
 
         String email = Sesion.recuperarSesion();
@@ -126,7 +116,7 @@ public class MenuCliente {
             return;
         }
 
-        String dni = clienteDAO.obtenerDniPorEmail(email);
+        String dni = ClienteDAO.obtenerDniPorEmail(email);
         if (dni == null) {
             System.out.println("No se pudo identificar al cliente.");
             return;

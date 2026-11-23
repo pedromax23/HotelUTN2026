@@ -10,8 +10,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //MenuPrincipal.menu();
-
         // 1. Inicializar la estructura de las tablas si no existen
         Iniciar_DB.inicializar();
 
