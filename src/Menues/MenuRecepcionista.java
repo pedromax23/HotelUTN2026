@@ -13,13 +13,12 @@ import java.util.Scanner;
 
 public class MenuRecepcionista {
 
-    private final Scanner scanner;
+    private static final Scanner scanner = new Scanner(System.in);
     private final ClienteDAO clienteDAO;
     private final HabitacionDAO habitacionDAO;
     private final ReservaDAO reservaDAO;
 
-    public MenuRecepcionista(Scanner scanner) {
-        this.scanner = scanner;
+    public MenuRecepcionista() {
         this.clienteDAO = new ClienteDAO();
         this.habitacionDAO = new HabitacionDAO();
         this.reservaDAO = new ReservaDAO();

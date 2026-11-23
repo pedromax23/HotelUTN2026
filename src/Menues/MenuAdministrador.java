@@ -11,13 +11,12 @@ import java.util.Scanner;
 
 public class MenuAdministrador {
 
-    private final Scanner scanner;
+    private static final Scanner scanner = new Scanner(System.in);
     private final EmpleadoDAO empleadoDAO;
     private final HabitacionDAO habitacionDAO;
     private final ClienteDAO clienteDAO;
 
-    public MenuAdministrador(Scanner scanner) {
-        this.scanner = scanner;
+    public MenuAdministrador() {
         this.empleadoDAO = new EmpleadoDAO();
         this.habitacionDAO = new HabitacionDAO();
         this.clienteDAO = new ClienteDAO();
