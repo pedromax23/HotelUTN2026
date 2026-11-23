@@ -32,6 +32,26 @@ public class EmpleadoDAO {
         }
     }
 
+    // Obtener rol de un empleado a partir de su email (útil al recuperar sesión activa)
+    public String obtenerRolPorEmail(String email) {
+        String sql = "SELECT rol FROM empleado WHERE email = ?";
+
+        try (Connection conn = ConexionDB.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("rol");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener rol por email: " + e.getMessage());
+        }
+        return null;
+    }
+
     // Autentica empleado y devuelve su rol ("ADMINISTRADOR" / "RECEPCIONISTA") o null si falla
     public String obtenerRolSiCredencialesValidas(String email, String contrasenia) {
         String sql = "SELECT rol FROM empleado WHERE email = ? AND contrasenia = ?";

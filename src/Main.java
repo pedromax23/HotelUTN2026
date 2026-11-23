@@ -18,7 +18,6 @@ public class Main {
         // 2. Iniciar el flujo normal de la aplicación (Menú de Login, etc.)
         System.out.println("\n--- BIENVENIDO AL SISTEMA DE GESTIÓN HOTELERA ---");
         // ... llamado a tus menús o controladores
-
         MenuPrincipal.menu();
 
     }
