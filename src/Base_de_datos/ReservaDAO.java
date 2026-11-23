@@ -239,7 +239,7 @@ public class ReservaDAO {
         }
     }
 
-    public List<String> listarReservasPendientes() {
+    public static List<String> listarReservasPendientes() {
 
         String sql = "SELECT r.id_reserva, r.dni_cliente, " +
                 "c.nombre, c.apellido, r.numero_habitacion, " +

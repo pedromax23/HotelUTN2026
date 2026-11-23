@@ -53,6 +53,8 @@ public class ReservaService {
     }
 
     public static ResultadoOperacion<Integer> confirmarReservaRecepcionista(String dni, int numeroHabitacion, LocalDate fechaInicio, LocalDate fechaFin) {
+
+        // Verifica que los campos no esten vacios
         if (dni == null || dni.isBlank()) {
             return ResultadoOperacion.error("No se pudo identificar al cliente.");
         }
@@ -60,7 +62,10 @@ public class ReservaService {
             return ResultadoOperacion.error("Las fechas ingresadas no son validas.");
         }
 
+        // Listamos las habitaciones disponibles
         List<Integer> disponibles = HabitacionDAO.buscarNumerosHabitacionesDisponibles(fechaInicio, fechaFin);
+
+        // Verificamos si hay habitaciones disponibles
         if (disponibles == null || disponibles.isEmpty()) {
             return ResultadoOperacion.error("No hay habitaciones disponibles para esas fechas.");
         }
@@ -68,11 +73,15 @@ public class ReservaService {
             return ResultadoOperacion.error("La habitacion seleccionada no esta disponible.");
         }
 
+        // Realizamos la reserva
         boolean reservada = ReservaDAO.crearReserva(dni.trim(), numeroHabitacion, fechaInicio, fechaFin);
+
+        // Si la reserva falla guardamos la respuesta de la operacion en la clase genrica
         if (!reservada) {
             return ResultadoOperacion.error("No se pudo realizar la reserva.");
         }
 
+        // Si la reserva se registra guardamos el mensaje en la clase generica
         return ResultadoOperacion.ok("¡Reserva realizada correctamente!", numeroHabitacion);
     }
 

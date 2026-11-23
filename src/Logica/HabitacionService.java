@@ -56,4 +56,11 @@ public class HabitacionService {
         return ResultadoOperacion.ok("Estado de la habitacion #" + numero + " actualizado a " + nuevoEstado + ".");
     }
 
+    public static List<String> listarHabitacionesOcupadas() {
+
+        List<String> habitaciones = HabitacionDAO.listarHabitacionesOcupadas();
+
+        return habitaciones;
+    }
+
 }

@@ -1,6 +1,7 @@
 package Logica;
 
 import Base_de_datos.EmpleadoDAO;
+import Base_de_datos.ReservaDAO;
 import Enums.RolEnum;
 import Exceptions.DniExiste;
 import Exceptions.EmailNoValido;
@@ -57,6 +58,13 @@ public class EmpleadoService {
             return false;
         }
         return EmpleadoDAO.actualizarRol(dni.trim(), nuevoRol.name());
+    }
+
+    public static List<String> listarReservasPendientes() {
+
+        List<String> reservas = ReservaDAO.listarReservasPendientes();
+
+        return reservas;
     }
 
 }

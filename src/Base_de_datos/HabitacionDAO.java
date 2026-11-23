@@ -92,7 +92,7 @@ public class HabitacionDAO {
         return disponibles;
     }
 
-    public List<String> listarHabitacionesOcupadas() {
+    public static List<String> listarHabitacionesOcupadas() {
 
         String sql = "SELECT h.numero, h.tipo, " +
                 "c.dni, c.nombre, c.apellido, " +

@@ -4,10 +4,7 @@ package Menues;
 import Base_de_datos.ClienteDAO;
 import Base_de_datos.HabitacionDAO;
 import Base_de_datos.ReservaDAO;
-import Logica.ClienteService;
-import Logica.HabitacionService;
-import Logica.ReservaService;
-import Logica.ResultadoOperacion;
+import Logica.*;
 import Session.Sesion;
 
 
@@ -18,8 +15,6 @@ import java.util.Scanner;
 
 public class MenuRecepcionista {
 
-    private static final ReservaDAO reservaDAO= new ReservaDAO();
-    private static final HabitacionDAO habitacionDAO= new HabitacionDAO();;
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void menu() {
@@ -81,39 +76,36 @@ public class MenuRecepcionista {
 
         System.out.println("\nREGISTRAR RESERVA");
 
+        // Pedimos el dni del cliente
         System.out.print("DNI del cliente: ");
         String dni = scanner.nextLine().trim();
 
+        // Verificamos que exista el cliente
         if (!ClienteService.existeCliente(dni)) {
             System.out.println("No existe un cliente con ese DNI.");
             return;
         }
 
+        // Guardamos las fechas de inicio y fin de la reserva
         LocalDate inicio = leerFecha("Fecha de ingreso: ");
         if (inicio == null) return;
-
         LocalDate fin = leerFecha("Fecha de salida: ");
         if (fin == null) return;
 
+        // Listamos las habitacion disponibles
         List<Integer> disponibles = HabitacionService.buscarHabitacionesDisponibles(inicio, fin);
-        if (disponibles == null) {
-            System.out.println("Las fechas ingresadas no son validas.");
-            return;
-        }
 
-        if (disponibles.isEmpty()) {
-            System.out.println("No hay habitaciones disponibles.");
-            return;
-        }
-
+        // Mostramos las habitaciones disponibles
         System.out.println("\nHabitaciones disponibles:");
         for (Integer numero : disponibles) {
             System.out.println("Habitacion: " + numero);
         }
 
+        // Guarmos la opcion del usuario
         System.out.print("Numero de habitacion: ");
         int numeroHabitacion = leerOpcion();
 
+        // Guardamos la reserva del usuario y registramos la operacion en la clase generica
         ResultadoOperacion<Integer> resultado = ReservaService.confirmarReservaRecepcionista(dni, numeroHabitacion, inicio, fin);
         System.out.println(resultado.getMensaje());
     }
@@ -122,6 +114,7 @@ public class MenuRecepcionista {
 
         System.out.println("\n--- CONSULTAR DISPONIBILIDAD ---");
 
+        // Pedimos los datos de las fechas
         LocalDate inicio = leerFecha("Fecha de ingreso: ");
         if (inicio == null) return;
 
@@ -241,27 +234,27 @@ public class MenuRecepcionista {
 
         System.out.println("\n===== RESERVAS PENDIENTES =====");
 
-        List<String> reservas = reservaDAO.listarReservasPendientes();
+        List<String> reservas = EmpleadoService.listarReservasPendientes();
 
+        // Verifica que las reservas no esten vacias
         if (reservas.isEmpty()) {
             System.out.println("No hay reservas pendientes.");
             return;
         }
 
+        // Muestra las reservas
         for (String reserva : reservas) {
             System.out.println(reserva);
         }
 
-        System.out.println("\nEstas reservas pueden utilizarse " +
-                "para realizar el check-in.");
+        System.out.println("\nEstas reservas pueden utilizarse " + "para realizar el check-in.");
     }
 
     private static void listarHabitacionesOcupadas() {
 
         System.out.println("\n===== HABITACIONES OCUPADAS =====");
 
-        List<String> habitaciones =
-                habitacionDAO.listarHabitacionesOcupadas();
+        List<String> habitaciones = HabitacionService.listarHabitacionesOcupadas();
 
         if (habitaciones.isEmpty()) {
             System.out.println("No hay habitaciones ocupadas actualmente.");
