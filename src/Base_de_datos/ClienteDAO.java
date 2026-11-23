@@ -55,7 +55,7 @@ public class ClienteDAO {
     }
 
     // Verificar si ya existe un cliente con ese DNI
-    public boolean existePorDni(String dni) {
+    public static boolean existePorDni(String dni) {
         String sql = "SELECT 1 FROM cliente WHERE dni = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();
@@ -130,7 +130,7 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public String obtenerDniPorEmail(String email) {
+    public static String obtenerDniPorEmail(String email) {
 
         String sql = "SELECT dni FROM cliente WHERE email = ?";
 

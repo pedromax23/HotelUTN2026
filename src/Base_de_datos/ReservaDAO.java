@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ReservaDAO {
 
-    public boolean crearReserva(String dniCliente, int numeroHabitacion, LocalDate fechaInicio, LocalDate fechaFin) {
+    public static boolean crearReserva(String dniCliente, int numeroHabitacion, LocalDate fechaInicio, LocalDate fechaFin) {
         String sql = "INSERT INTO reserva (dni_cliente, numero_habitacion, fecha_inicio, fecha_fin, estado_reserva) " +
                 "VALUES (?, ?, ?, ?, 'PENDIENTE')";
 
@@ -30,7 +30,7 @@ public class ReservaDAO {
         }
     }
 
-    public List<String> listarReservasPorCliente(String dniCliente) {
+    public static List<String> listarReservasPorCliente(String dniCliente) {
         String sql = "SELECT r.id_reserva, r.numero_habitacion, r.fecha_inicio, r.fecha_fin, r.estado_reserva, " +
                 "c.nombre, c.apellido " +
                 "FROM reserva r " +
@@ -81,7 +81,7 @@ public class ReservaDAO {
         }
     }
 
-    public boolean realizarCheckIn(int idReserva) {
+    public static boolean realizarCheckIn(int idReserva) {
 
         String sqlBuscar =
                 "SELECT numero_habitacion FROM reserva " +
@@ -158,7 +158,7 @@ public class ReservaDAO {
     }
 
 
-    public boolean realizarCheckOut(int idReserva) {
+    public static boolean realizarCheckOut(int idReserva) {
 
         String sqlBuscar =
                 "SELECT numero_habitacion FROM reserva " +

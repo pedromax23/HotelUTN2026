@@ -10,10 +10,6 @@ import java.util.List;
 
 public class ReservaService {
 
-    private static final ClienteDAO clienteDAO = new ClienteDAO();
-    private static final HabitacionDAO habitacionDAO = new HabitacionDAO();
-    private static final ReservaDAO reservaDAO = new ReservaDAO();
-
     public static List<Integer> obtenerHabitacionesDisponibles(LocalDate fechaInicio, LocalDate fechaFin) {
         if (fechaInicio == null || fechaFin == null) {
             return null;
@@ -21,7 +17,7 @@ public class ReservaService {
         if (fechaInicio.isBefore(LocalDate.now()) || !fechaFin.isAfter(fechaInicio)) {
             return null;
         }
-        return habitacionDAO.buscarNumerosHabitacionesDisponibles(fechaInicio, fechaFin);
+        return HabitacionDAO.buscarNumerosHabitacionesDisponibles(fechaInicio, fechaFin);
     }
 
     public static String confirmarReserva(int numeroHabitacion, LocalDate fechaInicio, LocalDate fechaFin) {
@@ -38,12 +34,12 @@ public class ReservaService {
             return "No hay una sesion activa.";
         }
 
-        String dni = clienteDAO.obtenerDniPorEmail(email);
+        String dni = ClienteDAO.obtenerDniPorEmail(email);
         if (dni == null) {
             return "No se pudo identificar al cliente.";
         }
 
-        boolean reservada = reservaDAO.crearReserva(dni, numeroHabitacion, fechaInicio, fechaFin);
+        boolean reservada = ReservaDAO.crearReserva(dni, numeroHabitacion, fechaInicio, fechaFin);
         if (!reservada) {
             return "No se pudo realizar la reserva.";
         }
@@ -59,6 +55,28 @@ public class ReservaService {
         if (dni == null || dni.trim().isEmpty()) {
             return List.of();
         }
-        return reservaDAO.listarReservasPorCliente(dni);
+        return ReservaDAO.listarReservasPorCliente(dni);
+    }
+
+    public static boolean realizarCheckIn(int idReserva) {
+        if (idReserva <= 0) {
+            return false;
+        }
+        return ReservaDAO.realizarCheckIn(idReserva);
+    }
+
+    public static boolean realizarCheckOut(int idReserva) {
+        if (idReserva <= 0) {
+            return false;
+        }
+        return ReservaDAO.realizarCheckOut(idReserva);
+    }
+
+    public static List<String> listarClientesResumen() {
+        return ClienteDAO.listarClientesResumen();
+    }
+
+    public static List<String> listarHabitacionesNoDisponibles() {
+        return HabitacionDAO.listarHabitacionesNoDisponibles();
     }
 }

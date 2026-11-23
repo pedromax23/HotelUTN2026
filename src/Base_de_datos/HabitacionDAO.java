@@ -63,7 +63,7 @@ public class HabitacionDAO {
     }
 
     // Habitaciones operativas sin reservas activas/pendientes que choquen con [inicio, fin]
-    public List<Integer> buscarNumerosHabitacionesDisponibles(LocalDate inicio, LocalDate fin) {
+    public static List<Integer> buscarNumerosHabitacionesDisponibles(LocalDate inicio, LocalDate fin) {
         String sql = "SELECT h.numero " +
                 "FROM habitacion h " +
                 "WHERE h.estado IN ('DISPONIBLE', 'RESERVADA') " +

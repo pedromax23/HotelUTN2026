@@ -4,6 +4,9 @@ package Menues;
 import Base_de_datos.ClienteDAO;
 import Base_de_datos.HabitacionDAO;
 import Base_de_datos.ReservaDAO;
+import Logica.ClienteService;
+import Logica.HabitacionService;
+import Logica.ReservaService;
 import Session.Sesion;
 
 import java.time.LocalDate;
@@ -78,7 +81,7 @@ public class MenuRecepcionista {
         System.out.print("DNI del cliente: ");
         String dni = scanner.nextLine().trim();
 
-        if (!clienteDAO.existePorDni(dni)) {
+        if (!ClienteService.existeCliente(dni)) {
             System.out.println("No existe un cliente con ese DNI.");
             return;
         }
@@ -89,15 +92,11 @@ public class MenuRecepcionista {
         LocalDate fin = leerFecha("Fecha de salida: ");
         if (fin == null) return;
 
-        if (inicio.isBefore(LocalDate.now()) || !fin.isAfter(inicio)) {
+        List<Integer> disponibles = HabitacionService.buscarHabitacionesDisponibles(inicio, fin);
+        if (disponibles == null) {
             System.out.println("Las fechas ingresadas no son validas.");
             return;
         }
-
-        List<Integer> disponibles =
-                habitacionDAO.buscarNumerosHabitacionesDisponibles(
-                        inicio, fin
-                );
 
         if (disponibles.isEmpty()) {
             System.out.println("No hay habitaciones disponibles.");
@@ -105,29 +104,15 @@ public class MenuRecepcionista {
         }
 
         System.out.println("\nHabitaciones disponibles:");
-
         for (Integer numero : disponibles) {
             System.out.println("Habitacion: " + numero);
         }
 
         System.out.print("Numero de habitacion: ");
-
         int numeroHabitacion = leerOpcion();
 
-        if (!disponibles.contains(numeroHabitacion)) {
-            System.out.println("La habitacion no esta disponible.");
-            return;
-        }
-
-        boolean creada = reservaDAO.crearReserva(
-                dni, numeroHabitacion, inicio, fin
-        );
-
-        if (creada) {
-            System.out.println("Reserva registrada correctamente.");
-        } else {
-            System.out.println("No se pudo registrar la reserva.");
-        }
+        String resultado = ReservaService.confirmarReserva(numeroHabitacion, inicio, fin);
+        System.out.println(resultado);
     }
 
     private void consultarDisponibilidad() {
@@ -140,15 +125,11 @@ public class MenuRecepcionista {
         LocalDate fin = leerFecha("Fecha de salida: ");
         if (fin == null) return;
 
-        if (inicio.isBefore(LocalDate.now()) || !fin.isAfter(inicio)) {
+        List<Integer> disponibles = HabitacionService.buscarHabitacionesDisponibles(inicio, fin);
+        if (disponibles == null) {
             System.out.println("Periodo invalido.");
             return;
         }
-
-        List<Integer> disponibles =
-                habitacionDAO.buscarNumerosHabitacionesDisponibles(
-                        inicio, fin
-                );
 
         if (disponibles.isEmpty()) {
             System.out.println("No hay habitaciones disponibles.");
@@ -156,7 +137,6 @@ public class MenuRecepcionista {
         }
 
         System.out.println("Habitaciones disponibles:");
-
         for (Integer numero : disponibles) {
             System.out.println("Habitacion: " + numero);
         }
@@ -165,9 +145,7 @@ public class MenuRecepcionista {
     private void realizarCheckIn() {
 
         System.out.println("\n--- CHECK-IN ---");
-
         System.out.print("ID de la reserva: ");
-
         int idReserva = leerOpcion();
 
         if (idReserva <= 0) {
@@ -175,7 +153,7 @@ public class MenuRecepcionista {
             return;
         }
 
-        if (reservaDAO.realizarCheckIn(idReserva)) {
+        if (ReservaService.realizarCheckIn(idReserva)) {
             System.out.println("Check-in realizado correctamente.");
         } else {
             System.out.println(
@@ -188,9 +166,7 @@ public class MenuRecepcionista {
     private void realizarCheckOut() {
 
         System.out.println("\n--- CHECK-OUT ---");
-
         System.out.print("ID de la reserva: ");
-
         int idReserva = leerOpcion();
 
         if (idReserva <= 0) {
@@ -198,7 +174,7 @@ public class MenuRecepcionista {
             return;
         }
 
-        if (reservaDAO.realizarCheckOut(idReserva)) {
+        if (ReservaService.realizarCheckOut(idReserva)) {
             System.out.println("Check-out realizado correctamente.");
         } else {
             System.out.println(
@@ -211,8 +187,7 @@ public class MenuRecepcionista {
     private void listarClientes() {
 
         System.out.println("\n CLIENTES");
-
-        List<String> clientes = clienteDAO.listarClientesResumen();
+        List<String> clientes = ClienteService.listarClientesResumen();
 
         if (clientes.isEmpty()) {
             System.out.println("No hay clientes registrados.");
@@ -227,11 +202,9 @@ public class MenuRecepcionista {
     private void listarHabitacionesNoDisponibles() {
 
         System.out.println("\n--- HABITACIONES NO DISPONIBLES ---");
+        List<String> habitaciones = HabitacionService.listarHabitacionesNoDisponibles();
 
-        List<String> habitaciones =
-                habitacionDAO.listarHabitacionesNoDisponibles();
-
-        if (habitaciones.isEmpty()) {
+        if (habitaciones == null || habitaciones.isEmpty()) {
             System.out.println("No hay habitaciones fuera de servicio.");
             return;
         }
@@ -244,7 +217,6 @@ public class MenuRecepcionista {
     private LocalDate leerFecha(String mensaje) {
 
         System.out.print(mensaje);
-
         try {
             return LocalDate.parse(scanner.nextLine().trim());
         } catch (DateTimeParseException e) {
