@@ -71,8 +71,27 @@ public class MenuPrincipal {
             System.out.println("Bienvenido/a.");
             System.out.println("Inicio de sesion como: " + rol);
 
+            switch (rol.toUpperCase()) {
+
+                case "ADMINISTRADOR":
+                    MenuAdministrador menuAdmin =
+                            new MenuAdministrador(scanner);
+                    menuAdmin.menu();
+                    break;
+
+                case "RECEPCIONISTA":
+                    MenuRecepcionista menuRecepcionista =
+                            new MenuRecepcionista(scanner);
+                    menuRecepcionista.menu();
+                    break;
+
+                default:
+                    System.out.println("Rol no reconocido.");
+            }
+
             return;
         }
+
 
         // Si no es empleado, comprobamos si es cliente
         if (clienteDAO.validarCredenciales(email, contrasenia)) {

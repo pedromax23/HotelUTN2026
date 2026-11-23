@@ -80,4 +80,163 @@ public class ReservaDAO {
             return false;
         }
     }
+
+    public boolean realizarCheckIn(int idReserva) {
+
+        String sqlBuscar =
+                "SELECT numero_habitacion FROM reserva " +
+                        "WHERE id_reserva = ? AND estado_reserva = 'PENDIENTE'";
+
+        String sqlReserva =
+                "UPDATE reserva SET estado_reserva = 'CHECK_IN' " +
+                        "WHERE id_reserva = ? AND estado_reserva = 'PENDIENTE'";
+
+        String sqlEstadia =
+                "INSERT INTO estadia (id_reserva, fecha_checkin, activa) " +
+                        "VALUES (?, NOW(), TRUE)";
+
+        String sqlHabitacion =
+                "UPDATE habitacion SET estado = 'OCUPADA' WHERE numero = ?";
+
+        try (Connection conn = ConexionDB.obtenerConexion()) {
+
+            conn.setAutoCommit(false);
+
+            try {
+                int numeroHabitacion;
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlBuscar)) {
+                    ps.setInt(1, idReserva);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) {
+                            conn.rollback();
+                            return false;
+                        }
+
+                        numeroHabitacion = rs.getInt("numero_habitacion");
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlReserva)) {
+                    ps.setInt(1, idReserva);
+
+                    if (ps.executeUpdate() == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlEstadia)) {
+                    ps.setInt(1, idReserva);
+                    ps.executeUpdate();
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlHabitacion)) {
+                    ps.setInt(1, numeroHabitacion);
+
+                    if (ps.executeUpdate() == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+
+                conn.commit();
+                return true;
+
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error en check-in: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+    public boolean realizarCheckOut(int idReserva) {
+
+        String sqlBuscar =
+                "SELECT numero_habitacion FROM reserva " +
+                        "WHERE id_reserva = ? AND estado_reserva = 'CHECK_IN'";
+
+        String sqlEstadia =
+                "UPDATE estadia SET fecha_checkout = NOW(), activa = FALSE " +
+                        "WHERE id_reserva = ? AND activa = TRUE";
+
+        String sqlReserva =
+                "UPDATE reserva SET estado_reserva = 'CHECK_OUT' " +
+                        "WHERE id_reserva = ? AND estado_reserva = 'CHECK_IN'";
+
+        String sqlHabitacion =
+                "UPDATE habitacion SET estado = 'DISPONIBLE', " +
+                        "motivo_no_disponibilidad = NULL WHERE numero = ?";
+
+        try (Connection conn = ConexionDB.obtenerConexion()) {
+
+            conn.setAutoCommit(false);
+
+            try {
+                int numeroHabitacion;
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlBuscar)) {
+                    ps.setInt(1, idReserva);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) {
+                            conn.rollback();
+                            return false;
+                        }
+
+                        numeroHabitacion = rs.getInt("numero_habitacion");
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlEstadia)) {
+                    ps.setInt(1, idReserva);
+
+                    if (ps.executeUpdate() == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlReserva)) {
+                    ps.setInt(1, idReserva);
+
+                    if (ps.executeUpdate() == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlHabitacion)) {
+                    ps.setInt(1, numeroHabitacion);
+
+                    if (ps.executeUpdate() == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+
+                conn.commit();
+                return true;
+
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error en check-out: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
