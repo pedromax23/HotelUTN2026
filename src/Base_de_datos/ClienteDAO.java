@@ -30,7 +30,7 @@ public class ClienteDAO {
     }
 
     // Completar o actualizar datos personales del cliente
-    public boolean actualizarDatosCliente(String dni, String nombre, String apellido,
+    public static boolean actualizarDatosCliente(String dni, String nombre, String apellido,
                                           String sexo, int edad, String domicilio, String origen) {
         String sql = "UPDATE cliente " +
                 "SET nombre = ?, apellido = ?, sexo = ?, edad = ?, domicilio = ?, origen = ? " +

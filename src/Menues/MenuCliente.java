@@ -4,6 +4,7 @@ package Menues;
 import Base_de_datos.ClienteDAO;
 import Base_de_datos.HabitacionDAO;
 import Base_de_datos.ReservaDAO;
+import Logica.ClienteService;
 import Logica.ReservaService;
 import Session.Sesion;
 
@@ -24,6 +25,7 @@ public class MenuCliente {
             System.out.println("\nMENU CLIENTE");
             System.out.println("1. Reservar habitacion");
             System.out.println("2. Consultar mis reservas");
+            System.out.println("3. Completar registro");
             System.out.println("0. Cerrar sesion");
             System.out.print("Seleccione una opcion: ");
 
@@ -38,6 +40,10 @@ public class MenuCliente {
 
                     case 2:
                         consultarReservas();
+                        break;
+
+                    case 3:
+                        completarRegistro();
                         break;
 
                     case 0:
@@ -132,6 +138,55 @@ public class MenuCliente {
         for (String reserva : reservas) {
             System.out.println(reserva);
         }
+    }
+
+    private static void completarRegistro() {
+        System.out.println("\n===== COMPLETAR REGISTRO =====");
+
+        String email = Sesion.recuperarSesion();
+        if (email == null || email.isBlank()) {
+            System.out.println("No hay una sesion activa.");
+            return;
+        }
+
+        String dni = ClienteService.obtenerDni(email);
+        if (dni == null || dni.isBlank()) {
+            System.out.println("No se pudo obtener el DNI del cliente.");
+            return;
+        }
+
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine().trim();
+
+        System.out.print("Apellido: ");
+        String apellido = scanner.nextLine().trim();
+
+        System.out.print("Sexo: ");
+        String sexo = scanner.nextLine().trim();
+
+        System.out.print("Edad: ");
+        int edad;
+        try {
+            edad = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Edad invalida. Debe ingresar un numero.");
+            return;
+        }
+
+        System.out.print("Domicilio: ");
+        String domicilio = scanner.nextLine().trim();
+
+        System.out.print("Origen: ");
+        String origen = scanner.nextLine().trim();
+
+        if (nombre.isEmpty() || apellido.isEmpty() || sexo.isEmpty()
+                || domicilio.isEmpty() || origen.isEmpty() || edad <= 0) {
+            System.out.println("Todos los campos son obligatorios y la edad debe ser mayor a 0.");
+            return;
+        }
+
+        ClienteService.actualizarCliente(dni, nombre, apellido, email, sexo, domicilio, origen, edad);
+        System.out.println("Registro completado!");
     }
 }
 

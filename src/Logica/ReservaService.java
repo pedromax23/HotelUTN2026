@@ -87,6 +87,7 @@ public class ReservaService {
         if (idReserva <= 0) {
             return false;
         }
+
         return ReservaDAO.realizarCheckIn(idReserva);
     }
 

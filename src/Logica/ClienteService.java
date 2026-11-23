@@ -16,4 +16,16 @@ public class ClienteService {
         return ClienteDAO.existePorDni(dni.trim());
     }
 
+    public static String obtenerDni(String email) {
+        return ClienteDAO.obtenerDniPorEmail(email);
+    }
+
+    public static void actualizarCliente(String dni, String nombre, String apellido, String email, String sexo, String domicilio, String origen, int edad) {
+        if (existeCliente(dni)) {
+
+            ClienteDAO.actualizarDatosCliente(dni, nombre, apellido, sexo, edad, domicilio, origen);
+
+        }
+    }
+
 }
