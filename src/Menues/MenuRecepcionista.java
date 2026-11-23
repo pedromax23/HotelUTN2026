@@ -10,6 +10,7 @@ import Logica.ReservaService;
 import Logica.ResultadoOperacion;
 import Session.Sesion;
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.Scanner;
 
 public class MenuRecepcionista {
 
+    private static final ReservaDAO reservaDAO= new ReservaDAO();
+    private static final HabitacionDAO habitacionDAO= new HabitacionDAO();;
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void menu() {
@@ -31,6 +34,8 @@ public class MenuRecepcionista {
             System.out.println("4. Realizar check-out");
             System.out.println("5. Listar clientes");
             System.out.println("6. Consultar habitaciones no disponibles");
+            System.out.println("7. Listar reservas pendientes");
+            System.out.println("8. Listar habitaciones ocupadas");
             System.out.println("0. Cerrar sesion");
             System.out.print("Seleccione una opcion: ");
 
@@ -58,6 +63,12 @@ public class MenuRecepcionista {
                 case 0:
                     Sesion.cerrarSesion();
                     System.out.println("Sesion cerrada.");
+                    break;
+                case 7:
+                    listarReservasPendientes();
+                    break;
+                case 8:
+                    listarHabitacionesOcupadas();
                     break;
                 default:
                     System.out.println("Opcion invalida.");
@@ -225,5 +236,42 @@ public class MenuRecepcionista {
             return -1;
         }
     }
+
+    private static void listarReservasPendientes() {
+
+        System.out.println("\n===== RESERVAS PENDIENTES =====");
+
+        List<String> reservas = reservaDAO.listarReservasPendientes();
+
+        if (reservas.isEmpty()) {
+            System.out.println("No hay reservas pendientes.");
+            return;
+        }
+
+        for (String reserva : reservas) {
+            System.out.println(reserva);
+        }
+
+        System.out.println("\nEstas reservas pueden utilizarse " +
+                "para realizar el check-in.");
+    }
+
+    private static void listarHabitacionesOcupadas() {
+
+        System.out.println("\n===== HABITACIONES OCUPADAS =====");
+
+        List<String> habitaciones =
+                habitacionDAO.listarHabitacionesOcupadas();
+
+        if (habitaciones.isEmpty()) {
+            System.out.println("No hay habitaciones ocupadas actualmente.");
+            return;
+        }
+
+        for (String habitacion : habitaciones) {
+            System.out.println(habitacion);
+        }
+    }
+
 }
 

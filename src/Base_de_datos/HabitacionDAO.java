@@ -91,4 +91,56 @@ public class HabitacionDAO {
         }
         return disponibles;
     }
+
+    public List<String> listarHabitacionesOcupadas() {
+
+        String sql = "SELECT h.numero, h.tipo, " +
+                "c.dni, c.nombre, c.apellido, " +
+                "e.fecha_checkin, r.fecha_inicio, r.fecha_fin " +
+                "FROM estadia e " +
+                "INNER JOIN reserva r ON e.id_reserva = r.id_reserva " +
+                "INNER JOIN habitacion h ON r.numero_habitacion = h.numero " +
+                "INNER JOIN cliente c ON r.dni_cliente = c.dni " +
+                "WHERE e.activa = TRUE " +
+                "ORDER BY h.numero";
+
+        List<String> habitaciones = new ArrayList<>();
+
+        try (Connection conn = ConexionDB.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+
+                if (nombre == null) nombre = "";
+                if (apellido == null) apellido = "";
+
+                String detalle = String.format(
+                        "Habitacion: %d | Tipo: %s | " +
+                                "Pasajero: %s %s | DNI: %s | " +
+                                "Check-in: %s | Salida prevista: %s",
+                        rs.getInt("numero"),
+                        rs.getString("tipo"),
+                        nombre,
+                        apellido,
+                        rs.getString("dni"),
+                        rs.getTimestamp("fecha_checkin").toLocalDateTime(),
+                        rs.getDate("fecha_fin").toLocalDate()
+                );
+
+                habitaciones.add(detalle);
+            }
+
+        } catch (SQLException e) {
+            System.err.println(
+                    "Error al listar habitaciones ocupadas: " + e.getMessage()
+            );
+        }
+
+        return habitaciones;
+    }
+
 }

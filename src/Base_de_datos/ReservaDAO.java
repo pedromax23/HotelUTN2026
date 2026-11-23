@@ -239,4 +239,51 @@ public class ReservaDAO {
         }
     }
 
+    public List<String> listarReservasPendientes() {
+
+        String sql = "SELECT r.id_reserva, r.dni_cliente, " +
+                "c.nombre, c.apellido, r.numero_habitacion, " +
+                "r.fecha_inicio, r.fecha_fin " +
+                "FROM reserva r " +
+                "INNER JOIN cliente c ON r.dni_cliente = c.dni " +
+                "WHERE r.estado_reserva = 'PENDIENTE' " +
+                "ORDER BY r.fecha_inicio ASC";
+
+        List<String> reservas = new ArrayList<>();
+
+        try (Connection conn = ConexionDB.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+
+                if (nombre == null) {
+                    nombre = "";
+                }
+
+                if (apellido == null) {
+                    apellido = "";
+                }
+
+                String detalle = "Reserva #" + rs.getInt("id_reserva")
+                        + " | DNI: " + rs.getString("dni_cliente")
+                        + " | Cliente: " + nombre + " " + apellido
+                        + " | Habitacion: " + rs.getInt("numero_habitacion")
+                        + " | Ingreso: " + rs.getDate("fecha_inicio")
+                        + " | Salida: " + rs.getDate("fecha_fin");
+
+                reservas.add(detalle);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar reservas pendientes: " + e.getMessage());
+        }
+
+        return reservas;
+    }
+
+
 }
