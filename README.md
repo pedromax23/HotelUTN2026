@@ -21,7 +21,7 @@ El sistema permite gestionar de manera eficiente la operativa diaria de un hotel
 
 ---
 
-## 🛠️ Requisitos Técnicos e Implementación (POO)
+## Requisitos Técnicos e Implementación (POO)
 
 El proyecto cumple estrictamente con los requerimientos académicos solicitados por la cátedra:
 
@@ -36,3 +36,9 @@ El proyecto cumple estrictamente con los requerimientos académicos solicitados 
 6. **Manejo de Errores:** Excepciones personalizadas desarrolladas para controlar errores de negocio (ej. `HabitacionNoDisponibleException`, `PasajeroNoEncontradoException`).
 7. **Clases Genéricas:** Implementación de una clase genérica (ej. `Repositorio<T>` o gestor de archivos) para reutilización de código.
 8. **Persistencia de Datos:** Almacenamiento y recuperación de información mediante archivos (texto/binarios/JSON).
+
+---
+
+## Iniciar el proyecto
+1. Se debera indicar la ubicacion de el modulo mysql-connector en la estructura del pryecto.
+2. Se debera crear el archivo db.properties en la raiz del proyecto con las credenciales url, usuario, contrasenia para el acceso a la base de datos.

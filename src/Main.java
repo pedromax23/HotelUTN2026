@@ -19,6 +19,7 @@ public class Main {
         System.out.println("\n--- BIENVENIDO AL SISTEMA DE GESTIÓN HOTELERA ---");
         // ... llamado a tus menús o controladores
 
+        MenuPrincipal.menu();
 
     }
 

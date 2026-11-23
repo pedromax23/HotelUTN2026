@@ -1,22 +1,26 @@
 package Base_de_datos;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Iniciar_DB {
 
-    private static final String RUTA_SCRIPT = "./schema.sql";
+    private static final String RUTA_SCRIPT = "schema.sql";
 
     public static void inicializar() {
         System.out.println("Verificando e inicializando la base de datos...");
 
+        InputStream input = Iniciar_DB.class.getResourceAsStream(RUTA_SCRIPT);
+        if (input == null) {
+            System.err.println("Error al leer el archivo de script SQL: no se encontró '" + RUTA_SCRIPT + "' en el paquete Base_de_datos.");
+            return;
+        }
+
         try (Connection conexion = ConexionDB.obtenerConexion();
              Statement statement = conexion.createStatement();
-             BufferedReader br = new BufferedReader(new FileReader(RUTA_SCRIPT))) {
+             BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
 
             StringBuilder sqlBuilder = new StringBuilder();
             String linea;
