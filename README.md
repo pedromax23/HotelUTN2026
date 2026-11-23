@@ -8,7 +8,7 @@ Proyecto final desarrollado para la materia **Programación II** (UTN). Consiste
 
 ---
 
-## 🚀 Características y Funcionalidades del Sistema
+## Características y Funcionalidades del Sistema
 
 El sistema permite gestionar de manera eficiente la operativa diaria de un hotel:
 * **Gestión de Habitaciones:** Control de habitaciones disponibles, ocupadas, reservadas o en mantenimiento/limpieza.
@@ -41,4 +41,4 @@ El proyecto cumple estrictamente con los requerimientos académicos solicitados 
 
 ## Iniciar el proyecto
 1. Se debera indicar la ubicacion de el modulo mysql-connector en la estructura del pryecto.
-2. Se debera crear el archivo db.properties en la raiz del proyecto con las credenciales url, usuario, contrasenia para el acceso a la base de datos.
+2. Se debera crear el archivo db.properties en la raiz del proyecto con las credenciales db.url, db.usuario, db.contrasenia para el acceso a la base de datos local.

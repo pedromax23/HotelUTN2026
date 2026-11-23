@@ -12,7 +12,7 @@ import java.util.List;
 public class ClienteDAO {
 
     // Registro inicial del cliente (DNI, email, contraseña)
-    public boolean registrarClienteBasico(String dni, String email, String contrasenia) {
+    public static boolean registrarClienteBasico(String dni, String email, String contrasenia) {
         String sql = "INSERT INTO cliente (dni, email, contrasenia) VALUES (?, ?, ?)";
 
         try (Connection conn = ConexionDB.obtenerConexion();
@@ -72,7 +72,7 @@ public class ClienteDAO {
     }
 
     // Verificar si ya existe un cliente con ese email
-    public boolean existePorEmail(String email) {
+    public static boolean existePorEmail(String email) {
         String sql = "SELECT 1 FROM cliente WHERE email = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();
@@ -89,7 +89,7 @@ public class ClienteDAO {
     }
 
     // Validar login de cliente por email y contraseña
-    public boolean validarCredenciales(String email, String contrasenia) {
+    public static boolean validarCredenciales(String email, String contrasenia) {
         String sql = "SELECT 1 FROM cliente WHERE email = ? AND contrasenia = ?";
 
         try (Connection conn = ConexionDB.obtenerConexion();

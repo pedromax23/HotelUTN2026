@@ -13,9 +13,8 @@ public class Main {
         // 1. Inicializar la estructura de las tablas si no existen
         Iniciar_DB.inicializar();
 
-        // 2. Iniciar el flujo normal de la aplicación (Menú de Login, etc.)
+        // 2. Iniciar el flujo normal de la aplicación
         System.out.println("\n--- BIENVENIDO AL SISTEMA DE GESTIÓN HOTELERA ---");
-        // ... llamado a tus menús o controladores
         MenuPrincipal.menu();
 
     }
