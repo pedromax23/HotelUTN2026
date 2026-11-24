@@ -47,6 +47,7 @@ public class HabitacionDAO {
         try (Connection conn = ConexionDB.obtenerConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            // Seteamos los valores de la consulta
             ps.setString(1, nuevoEstado);
             if ("DISPONIBLE".equalsIgnoreCase(nuevoEstado)) {
                 ps.setNull(2, java.sql.Types.VARCHAR);

@@ -16,6 +16,8 @@ public class ResultadoOperacion<T> {
     }
 
     public static <T> ResultadoOperacion<T> ok(String mensaje) {
+
+        // Creamos un objeto con la informacion de la operacion. exito, mensaje, y dato en caso de devolverlo
         return new ResultadoOperacion<>(true, mensaje, null);
     }
 
