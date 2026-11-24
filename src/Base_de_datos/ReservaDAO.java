@@ -285,5 +285,25 @@ public class ReservaDAO {
         return reservas;
     }
 
+    public static boolean cancelarReserva(int idReserva) {
+
+        String sql = "UPDATE reserva SET estado_reserva = 'CANCELADA' " +
+                "WHERE id_reserva = ? AND estado_reserva = 'PENDIENTE'";
+
+        try (Connection conn = ConexionDB.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idReserva);
+
+            int filasAfectadas = ps.executeUpdate();
+
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al cancelar la reserva: " + e.getMessage());
+            return false;
+        }
+    }
+
 
 }

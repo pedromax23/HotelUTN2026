@@ -114,4 +114,13 @@ public class ReservaService {
     public static List<String> listarHabitacionesNoDisponibles() {
         return HabitacionDAO.listarHabitacionesNoDisponibles();
     }
+
+    public static boolean cancelarReserva(int idReserva) {
+
+        if (idReserva <= 0) {
+            return false;
+        }
+
+        return ReservaDAO.cancelarReserva(idReserva);
+    }
 }

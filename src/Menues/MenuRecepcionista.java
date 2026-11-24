@@ -31,6 +31,7 @@ public class MenuRecepcionista {
             System.out.println("6. Consultar habitaciones no disponibles");
             System.out.println("7. Listar reservas pendientes");
             System.out.println("8. Listar habitaciones ocupadas");
+            System.out.println("9. Cancelar reserva");
             System.out.println("0. Cerrar sesion");
             System.out.print("Seleccione una opcion: ");
 
@@ -64,6 +65,9 @@ public class MenuRecepcionista {
                     break;
                 case 8:
                     listarHabitacionesOcupadas();
+                    break;
+                case 9:
+                    cancelarReserva();
                     break;
                 default:
                     System.out.println("Opcion invalida.");
@@ -266,5 +270,18 @@ public class MenuRecepcionista {
         }
     }
 
+    private static void cancelarReserva() {
+
+        System.out.print("Ingrese el ID de la reserva: ");
+        int idReserva = scanner.nextInt();
+
+        boolean resultado = ReservaService.cancelarReserva(idReserva);
+
+        if (resultado) {
+            System.out.println("Reserva cancelada correctamente.");
+        } else {
+            System.out.println("No se pudo cancelar la reserva. Verifique que exista y esté pendiente.");
+        }
+    }
 }
 
